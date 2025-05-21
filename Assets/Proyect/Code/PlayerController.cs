@@ -21,9 +21,7 @@ namespace FinalProyect {
         int initialSpeed;
         public int Speed {
             get => normalSpeed;
-            set {
-                normalSpeed = value;
-            }
+            set => normalSpeed = value;
         }
         Vector3 movementDir;
 
