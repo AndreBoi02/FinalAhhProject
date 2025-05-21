@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,12 +10,19 @@ public class AttackSystem : MonoBehaviour {
         bow,
         magic
     }
-
+    [Header ("CurrentWeapon")]
     public AttackType weapon;
     int weaponIdx = 0;
 
+    [Header("WeaponsReferences")]
+    [SerializeField] GameObject sword;
+    [SerializeField] GameObject proyectile;
+
     void Start() {
         SwitchBetweenWeapons();
+        if (sword == null)
+            return;
+        sword?.SetActive(false);
     }
 
     void SwitchBetweenWeapons() {
@@ -38,6 +46,10 @@ public class AttackSystem : MonoBehaviour {
             attackFunction();
     }
 
+    public void ExecuteAttack() {
+        attackFunction();
+    }
+
     public void NextWeapon(InputAction.CallbackContext context) {
         if (context.performed) {
             weaponIdx = (weaponIdx + 1) % 3;
@@ -55,11 +67,20 @@ public class AttackSystem : MonoBehaviour {
     }
 
     void SwordAttack() {
-        Debug.Log("Swing");
+        StartCoroutine(TurnOnAndOffTheSword());
+    }
+
+    IEnumerator TurnOnAndOffTheSword() {
+        sword?.SetActive(true);
+        yield return new WaitForSeconds(.5f);
+        sword?.SetActive(false);
     }
 
     void bowAttack() {
-        Debug.Log("Pew Pew");
+        if (proyectile == null)
+            return;
+        GameObject tempProyectile;
+        tempProyectile = Instantiate(proyectile, transform.position, transform.localRotation);
     }
 
     void MagicAttack() {
