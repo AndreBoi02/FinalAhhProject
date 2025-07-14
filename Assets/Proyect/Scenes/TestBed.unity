@@ -290,7 +290,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: dec6684374d72ff44b2d3ede9c6cbb80, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -382,6 +382,7 @@ GameObject:
   - component: {fileID: 321231592}
   - component: {fileID: 321231591}
   - component: {fileID: 321231590}
+  - component: {fileID: 321231593}
   m_Layer: 0
   m_Name: TankHolder
   m_TagString: Untagged
@@ -398,7 +399,7 @@ Transform:
   m_GameObject: {fileID: 321231588}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.11, y: 1, z: 0}
+  m_LocalPosition: {x: -10.32, y: 1, z: -11.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -418,7 +419,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c12f4a24f3c2ef4d8ca8b02f06f852f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
   aTarget: {fileID: 1806579237}
   m_targetPos: {x: 0, y: 0, z: 0}
   m_pos: {x: 0, y: 0, z: 0}
@@ -426,7 +426,7 @@ MonoBehaviour:
   m_maxVel: 2
   m_maxForce: 2
   m_maxSpeed: 2
-  m_slowingFactor: 1
+  m_slowingRadius: 0
   m_proximity: 2
   rotationSpeed: 5
   attackCoolDown: 2
@@ -472,6 +472,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &321231593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 321231588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fc92a9406deab142836451a4b1646e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,8 +571,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.07434079, y: -0.9231536, z: 0.22915886, w: 0.2995784}
+  m_LocalPosition: {x: 10.568291, y: 6.899756, z: 11.443544}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1125,7 +1138,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: dec6684374d72ff44b2d3ede9c6cbb80, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1164,7 +1177,7 @@ Transform:
   m_GameObject: {fileID: 829797979}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.76, y: 0.66, z: -3.86}
+  m_LocalPosition: {x: 0.15, y: 0.66, z: -2.5}
   m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1183,7 +1196,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78fbfd48149ae6340972bcc3d18b9232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
   aTarget: {fileID: 1806579237}
   m_targetPos: {x: 0, y: 0, z: 0}
   m_pos: {x: 0, y: 0, z: 0}
@@ -1191,7 +1203,7 @@ MonoBehaviour:
   m_maxVel: 3
   m_maxForce: 3
   m_maxSpeed: 3
-  m_slowingFactor: 2
+  m_slowingRadius: 0
   m_proximity: 5
   rotationSpeed: 5
   attackCoolDown: 2
@@ -1350,7 +1362,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: a685dd9578c45c541bb7aecb4cbce4ec, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1390,7 +1402,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.4672, y: 2.4672, z: 2.4672}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1385929360}
@@ -1706,7 +1718,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 32045b33decaad940ad2e0f6ce397d7e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1822,7 +1834,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 7a2730578f5bb9e4497a26ea0daf64e7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2089,7 +2101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f5621f249a51d044a4e3b2a6bc56ad7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
   aTarget: {fileID: 1806579237}
   m_targetPos: {x: 0, y: 0, z: 0}
   m_pos: {x: 0, y: 0, z: 0}
@@ -2097,9 +2108,10 @@ MonoBehaviour:
   m_maxVel: 0
   m_maxForce: 0
   m_maxSpeed: 0
-  m_slowingFactor: 0
+  m_slowingRadius: 0
   m_proximity: 0
   rotationSpeed: 5
+  attackCoolDown: 0
 --- !u!1 &2137958625
 GameObject:
   m_ObjectHideFlags: 0

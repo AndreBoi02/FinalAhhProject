@@ -1,61 +1,118 @@
-using UnityEngine;
+﻿using UnityEngine;
+
+#region Struct
+[System.Serializable]
+public struct SteeringVars{
+    [Tooltip("Controls how fast the agent wants to move" +
+        " \n ↑ Increase → More aggressive movement (faster acceleration toward the target)." +
+        " \n ↓ Decrease → Smoother, slower movement.")]
+    [SerializeField] public float maxVel;
+
+    [Tooltip("Limits how sharply the agent can turn or change direction." +
+        " \n ↑ Increase → Sharper turns, more responsive movement (can look \"jittery\" if too high)." +
+        " \n ↓ Decrease → Smoother, more gradual turns (can feel \"sluggish\" if too low).")]
+    [SerializeField] public float maxForce;
+
+    [Tooltip("Caps the agent’s real speed (after steering forces are applied)." +
+        " \n ↑ Increase → The agent moves faster in a straight line." +
+        " \n ↓ Decrease → The agent never exceeds this speed, even if m_maxVel is higher.")]
+    [SerializeField] public float maxSpeed;
+
+    [Tooltip("Determines how early the agent slows down when approaching a target" +
+        " \n ↑ Increase → The agent starts braking earlier (smoother stops)." +
+        " \n ↓ Decrease → The agent brakes late (may overshoot the target).")]
+    [SerializeField] public float slowingRadius;
+
+    [Tooltip("Not used now")]
+    [SerializeField] public float m_proximity;
+}
+
+#endregion
 
 [RequireComponent(typeof(Rigidbody), typeof(AttackSystem))]
 public class Agent : MonoBehaviour {
-    public enum typeOfBehaviours {
+    #region Enums
+
+    protected enum typeOfBehaviours {
         Seek,
         Flee,
         none
     }
 
-    public typeOfBehaviours type = typeOfBehaviours.Seek;
+    #endregion
 
-    public Agent aTarget;
-    [HideInInspector] public Rigidbody rb => GetComponent<Rigidbody>();
+    #region References
+
+    protected Agent m_aTarget;
+    protected Rigidbody m_rb => GetComponent<Rigidbody>();
+    protected AttackSystem attackSystem => GetComponent<AttackSystem>();
+
+    SteeringVars steeringVars;
+
+    #endregion
+
+    #region Runtime Var
 
     [HideInInspector] public Vector3 m_targetPos;
     [HideInInspector] public Vector3 m_pos;
     [HideInInspector] public Vector3 m_currentVel;
+    protected typeOfBehaviours type = typeOfBehaviours.Seek;
 
-    public float m_maxVel;
-    public float m_maxForce;
-    public float m_maxSpeed;
-    public float m_slowingFactor;
-    public float m_proximity;
+    #endregion
 
-    protected AttackSystem attackSystem => GetComponent<AttackSystem>();
-    
     protected virtual void Start() {
         m_pos = transform.position;
-        m_targetPos = aTarget.transform.position;
+        m_targetPos = m_aTarget.transform.position;
     }
     
     protected virtual void FixedUpdate() {
         m_pos = transform.position;
         Move();
-        m_targetPos = aTarget.transform.position;
+        m_targetPos = m_aTarget.transform.position;
     }
     
     protected virtual void Move() {
         switch (type) {
             case typeOfBehaviours.Seek:
-                EnemyBehaviour.seek(this);
+                EnemyBehaviour.Seek(this);
                 break;
             case typeOfBehaviours.Flee:
-                EnemyBehaviour.flee(this);
+                EnemyBehaviour.Flee(this);
                 break;
             case typeOfBehaviours.none:
                 return;
         }
-        rb.linearVelocity = m_currentVel;
+        m_rb.linearVelocity = m_currentVel;
     }
+
+    #region Getters & Setters
+
+    public Agent GetTargetAgent() {
+        return m_aTarget;
+    }
+
+    public Rigidbody GetRigidbody() {
+        return m_rb; 
+    }
+
+    public SteeringVars GetSteeringVars() {
+        return steeringVars;
+    }
+
+    public void SetSteeringVars(SO_EnemyVariables sO_EnemyVariables) {
+        steeringVars = sO_EnemyVariables.SteeringVars;
+    }
+
+    #endregion
+
+    #region Trash
 
     [Header("Rotation Settings")]
     [SerializeField] protected float rotationSpeed = 5f;
 
     protected virtual void FacePlayer() {
         Vector3 direction = (m_targetPos - transform.position).normalized;
-        direction.y = 0; // Opcional: mantener el enemigo "plano" en el eje Y
+        direction.y = 0;
 
         if (direction != Vector3.zero) {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -66,8 +123,6 @@ public class Agent : MonoBehaviour {
             );
         }
     }
-
-
 
     protected float DistanceFromPlayer() {
         return Vector3.Distance(m_pos, m_targetPos);
@@ -83,4 +138,5 @@ public class Agent : MonoBehaviour {
         attackCounter += Time.deltaTime;
         return true;
     }
+    #endregion
 }

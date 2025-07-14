@@ -7,11 +7,11 @@ public class Tank : Agent {
             if (!OnAttackCoolDown()) {
                 attackSystem.ExecuteAttack();
             }
-            rb.linearVelocity = Vector3.zero;
+            m_rb.linearVelocity = Vector3.zero;
         }
         else {
-            EnemyBehaviour.seek(this);
-            rb.linearVelocity = m_currentVel;
+            EnemyBehaviour.Seek(this);
+            m_rb.linearVelocity = m_currentVel;
         }
     }
 }

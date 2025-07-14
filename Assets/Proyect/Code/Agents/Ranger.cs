@@ -7,11 +7,11 @@ public class Ranger : Agent {
                 FacePlayer();
                 attackSystem.ExecuteAttack();
             }
-            rb.linearVelocity = Vector3.zero;
+            m_rb.linearVelocity = Vector3.zero;
         }
         else {
-            EnemyBehaviour.flee(this);
-            rb.linearVelocity = m_currentVel;
+            EnemyBehaviour.Flee(this);
+            m_rb.linearVelocity = m_currentVel;
         }
     }
 }
