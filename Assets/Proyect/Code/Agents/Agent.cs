@@ -43,32 +43,26 @@ public class Agent : MonoBehaviour {
 
     #region References
 
-    protected Agent m_aTarget;
+    [SerializeField] protected Agent m_aTarget;
     protected Rigidbody m_rb => GetComponent<Rigidbody>();
     protected AttackSystem attackSystem => GetComponent<AttackSystem>();
-
-    SteeringVars steeringVars;
+    [SerializeField] SteeringVars m_steeringVars;
 
     #endregion
 
     #region Runtime Var
 
-    [HideInInspector] public Vector3 m_targetPos;
-    [HideInInspector] public Vector3 m_pos;
+    public Vector3 m_targetPos;
+    public Vector3 m_pos;
     [HideInInspector] public Vector3 m_currentVel;
     protected typeOfBehaviours type = typeOfBehaviours.Seek;
 
     #endregion
-
-    protected virtual void Start() {
-        m_pos = transform.position;
-        m_targetPos = m_aTarget.transform.position;
-    }
     
     protected virtual void FixedUpdate() {
         m_pos = transform.position;
+        m_targetPos = m_aTarget.gameObject.transform.position;
         Move();
-        m_targetPos = m_aTarget.transform.position;
     }
     
     protected virtual void Move() {
@@ -96,11 +90,17 @@ public class Agent : MonoBehaviour {
     }
 
     public SteeringVars GetSteeringVars() {
-        return steeringVars;
+        return m_steeringVars;
     }
 
     public void SetSteeringVars(SO_EnemyVariables sO_EnemyVariables) {
-        steeringVars = sO_EnemyVariables.SteeringVars;
+        m_steeringVars = sO_EnemyVariables.SteeringVars;
+    }
+
+    public void SetTarget(Agent t_agent) {
+        m_aTarget = t_agent;
+        //m_pos = transform.position;
+        //m_targetPos = m_aTarget.gameObject.transform.position;
     }
 
     #endregion

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b22ace3c5cca42c43969520ab96b6129, type: 3}
-  m_Name: RangerVars
+  m_Name: TankVars
   m_EditorClassIdentifier: 
   SteeringVars:
-    maxVel: 3
-    maxForce: 1.5
-    maxSpeed: 5
-    slowingRadius: 2
+    maxVel: 2
+    maxForce: 1
+    maxSpeed: 3
+    slowingRadius: 3
     m_proximity: 0

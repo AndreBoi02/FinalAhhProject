@@ -1,6 +1,7 @@
 using UnityEngine;
 
 public class Ranger : Agent {
+
     protected override void Move() {
         if (DistanceFromPlayer() >= 7f) {
             if (!OnAttackCoolDown()) {
