@@ -14,6 +14,6 @@ public class FleeBehaviour : SteeringBehaviour {
     /// </remarks>
     public override void Execute(Agent t_agent) {
         Vector3 desiredVel = t_agent.GetCurrentPos() - t_agent.GetTargetPos();
-        BaseBehaviour(desiredVel, t_agent);
+        CalculateSteer(desiredVel, t_agent);
     }
 }

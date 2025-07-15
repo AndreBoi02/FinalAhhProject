@@ -3,7 +3,7 @@ using UnityEngine;
 public class Tank : Agent {
 
     protected override void Start() {
-        SetBehavior(new SeekBehaviour());
+        SetBehavior(new PursuitBehaviour());
     }
 
     protected override void Move() {

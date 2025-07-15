@@ -53,7 +53,8 @@ public class Agent : MonoBehaviour {
     #region Runtime Var
 
     protected Vector3 m_pos => transform.position;
-    protected Vector3 m_targetPos => m_aTarget != null ? m_aTarget.transform.position:Vector3.zero;
+    //protected Vector3 m_targetPos => m_aTarget != null ? m_aTarget.transform.position:Vector3.zero;
+    protected Vector3 m_targetPos;
     protected Vector3 m_currentVel;
     protected typeOfBehaviours type = typeOfBehaviours.Seek;
 
@@ -61,10 +62,13 @@ public class Agent : MonoBehaviour {
 
     protected ISteeringBehaviour m_currentBehaviour;
 
-    protected virtual void Start() { }
+    protected virtual void Start() {
+        m_targetPos = m_aTarget != null ? m_aTarget.transform.position : Vector3.zero;
+    }
 
     protected virtual void FixedUpdate() {
         Move();
+        m_targetPos = m_aTarget != null ? m_aTarget.transform.position : Vector3.zero;
     }
      
     protected virtual void Move() { }
@@ -75,6 +79,10 @@ public class Agent : MonoBehaviour {
 
     #region Getters & Setters
 
+    public Agent GetTarget() {
+        return m_aTarget; 
+    }
+    
     public Rigidbody GetRigidbody() {
         return m_rb; 
     }
@@ -98,7 +106,11 @@ public class Agent : MonoBehaviour {
     public void SetCurrentVel(Vector3 val) {
         m_currentVel = val;
     }
-    
+
+    public void SetTargetPos(Vector3 val) {
+        m_targetPos = val;
+    }
+
     public void SetSteeringVars(SO_EnemyVariables sO_EnemyVariables) {
         m_steeringVars = sO_EnemyVariables.SteeringVars;
     }

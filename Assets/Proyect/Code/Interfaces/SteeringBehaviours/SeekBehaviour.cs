@@ -19,7 +19,7 @@ public class SeekBehaviour : SteeringBehaviour {
     public override void Execute(Agent t_agent) {
         Vector3 desiredVel = t_agent.GetTargetPos() - t_agent.GetCurrentPos();
         float distance = Vector3.Distance(t_agent.GetCurrentPos(), t_agent.GetTargetPos());
-        BaseBehaviour(desiredVel, t_agent);
+        CalculateSteer(desiredVel, t_agent);
         Arrive(t_agent, distance);
     }
 }

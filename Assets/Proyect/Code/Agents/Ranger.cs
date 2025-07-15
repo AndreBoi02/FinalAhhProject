@@ -3,7 +3,7 @@ using UnityEngine;
 public class Ranger : Agent {
 
     protected override void Start() {
-        SetBehavior(new FleeBehaviour());
+        SetBehavior(new EvadeBehaviour());
     }
 
     protected override void Move() {

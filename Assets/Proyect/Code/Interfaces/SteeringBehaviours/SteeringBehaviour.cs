@@ -38,7 +38,7 @@ public abstract class SteeringBehaviour : ISteeringBehaviour {
     /// Physics Note: Uses immediate velocity changes. For gradual acceleration, 
     /// integrate with ForceMode.Acceleration.
     /// </remarks>
-    protected void BaseBehaviour(Vector3 t_desiredVel, Agent t_agent) {
+    protected void CalculateSteer(Vector3 t_desiredVel, Agent t_agent) {
         // Convert to direction vector and scale to max speed
         t_desiredVel = t_desiredVel.normalized;
         t_desiredVel *= t_agent.GetSteeringVars().maxVel;
