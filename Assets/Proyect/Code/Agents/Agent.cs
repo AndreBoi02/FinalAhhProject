@@ -43,47 +43,37 @@ public class Agent : MonoBehaviour {
 
     #region References
 
-    [SerializeField] protected Agent m_aTarget;
     protected Rigidbody m_rb => GetComponent<Rigidbody>();
     protected AttackSystem attackSystem => GetComponent<AttackSystem>();
+    [SerializeField] protected Agent m_aTarget;
     [SerializeField] SteeringVars m_steeringVars;
 
     #endregion
 
     #region Runtime Var
 
-    public Vector3 m_targetPos;
-    public Vector3 m_pos;
-    [HideInInspector] public Vector3 m_currentVel;
+    protected Vector3 m_pos => transform.position;
+    protected Vector3 m_targetPos => m_aTarget != null ? m_aTarget.transform.position:Vector3.zero;
+    protected Vector3 m_currentVel;
     protected typeOfBehaviours type = typeOfBehaviours.Seek;
 
     #endregion
-    
+
+    protected ISteeringBehaviour m_currentBehaviour;
+
+    protected virtual void Start() { }
+
     protected virtual void FixedUpdate() {
-        m_pos = transform.position;
-        m_targetPos = m_aTarget.gameObject.transform.position;
         Move();
     }
-    
-    protected virtual void Move() {
-        switch (type) {
-            case typeOfBehaviours.Seek:
-                EnemyBehaviour.Seek(this);
-                break;
-            case typeOfBehaviours.Flee:
-                EnemyBehaviour.Flee(this);
-                break;
-            case typeOfBehaviours.none:
-                return;
-        }
-        m_rb.linearVelocity = m_currentVel;
+     
+    protected virtual void Move() { }
+
+    protected void SetBehavior(ISteeringBehaviour newBehaviour) {
+        m_currentBehaviour = newBehaviour;
     }
 
     #region Getters & Setters
-
-    public Agent GetTargetAgent() {
-        return m_aTarget;
-    }
 
     public Rigidbody GetRigidbody() {
         return m_rb; 
@@ -93,14 +83,28 @@ public class Agent : MonoBehaviour {
         return m_steeringVars;
     }
 
+    public Vector3 GetCurrentPos() {
+        return m_pos;
+    }
+    
+    public Vector3 GetTargetPos() {
+        return m_targetPos;
+    }
+
+    public Vector3 GetCurrentVel() {
+        return m_currentVel;
+    }
+    
+    public void SetCurrentVel(Vector3 val) {
+        m_currentVel = val;
+    }
+    
     public void SetSteeringVars(SO_EnemyVariables sO_EnemyVariables) {
         m_steeringVars = sO_EnemyVariables.SteeringVars;
     }
 
     public void SetTarget(Agent t_agent) {
         m_aTarget = t_agent;
-        //m_pos = transform.position;
-        //m_targetPos = m_aTarget.gameObject.transform.position;
     }
 
     #endregion

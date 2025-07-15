@@ -17,8 +17,8 @@ public class SeekBehaviour : SteeringBehaviour {
     /// Design Note: Tune slowingRadius for "personality" (aggressive/gentle stops).
     /// </remarks>
     public override void Execute(Agent t_agent) {
-        Vector3 desiredVel = t_agent.GetTargetAgent().m_pos - t_agent.m_pos;
-        float distance = Vector3.Distance(t_agent.m_pos, t_agent.GetTargetAgent().m_pos);
+        Vector3 desiredVel = t_agent.GetTargetPos() - t_agent.GetCurrentPos();
+        float distance = Vector3.Distance(t_agent.GetCurrentPos(), t_agent.GetTargetPos());
         BaseBehaviour(desiredVel, t_agent);
         Arrive(t_agent, distance);
     }

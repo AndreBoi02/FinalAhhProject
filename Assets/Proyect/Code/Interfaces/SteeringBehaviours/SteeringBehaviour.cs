@@ -15,7 +15,7 @@ public abstract class SteeringBehaviour : ISteeringBehaviour {
     protected void Arrive(Agent t_agent, float t_distance) {
         if (t_distance <= t_agent.GetSteeringVars().slowingRadius) {
             float slowing = t_distance / t_agent.GetSteeringVars().slowingRadius;
-            t_agent.m_currentVel *= slowing;
+            t_agent.SetCurrentVel(t_agent.GetCurrentVel() * slowing);
         }
     }
 
@@ -44,7 +44,7 @@ public abstract class SteeringBehaviour : ISteeringBehaviour {
         t_desiredVel *= t_agent.GetSteeringVars().maxVel;
 
         // Calculate steering force (change needed)
-        Vector3 steering = t_desiredVel - t_agent.m_currentVel;
+        Vector3 steering = t_desiredVel - t_agent.GetCurrentVel();
 
         // Limit steering force magnitude
         steering = TruncateVec(steering, t_agent.GetSteeringVars().maxForce);
@@ -53,7 +53,7 @@ public abstract class SteeringBehaviour : ISteeringBehaviour {
         steering /= t_agent.GetRigidbody().mass;
 
         // Update velocity with steering force (clamped to max speed)
-        t_agent.m_currentVel = TruncateVec(t_agent.m_currentVel + steering, t_agent.GetSteeringVars().maxSpeed);
+        t_agent.SetCurrentVel(TruncateVec(t_agent.GetCurrentVel() + steering, t_agent.GetSteeringVars().maxSpeed));
     }
 
     /// <summary>

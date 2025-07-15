@@ -1,6 +1,11 @@
 using UnityEngine;
 
 public class Tank : Agent {
+
+    protected override void Start() {
+        SetBehavior(new SeekBehaviour());
+    }
+
     protected override void Move() {
         FacePlayer();
         if (DistanceFromPlayer() <= 1.5f) {
@@ -10,7 +15,7 @@ public class Tank : Agent {
             m_rb.linearVelocity = Vector3.zero;
         }
         else {
-            EnemyBehaviour.Seek(this);
+            m_currentBehaviour?.Execute(this);
             m_rb.linearVelocity = m_currentVel;
         }
     }

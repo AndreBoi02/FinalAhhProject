@@ -13,7 +13,7 @@ public class FleeBehaviour : SteeringBehaviour {
     /// For coordinated evasion, combine with obstacle avoidance.
     /// </remarks>
     public override void Execute(Agent t_agent) {
-        Vector3 desiredVel = t_agent.m_pos - t_agent.GetTargetAgent().m_pos;
+        Vector3 desiredVel = t_agent.GetCurrentPos() - t_agent.GetTargetPos();
         BaseBehaviour(desiredVel, t_agent);
     }
 }

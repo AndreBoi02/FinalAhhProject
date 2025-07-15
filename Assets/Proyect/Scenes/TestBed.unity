@@ -227,63 +227,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 102402451}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &123052018
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1395402502347913142, guid: 64f15d0091aa36a4f835370cf8d80e24, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 6.8090506
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395402502347913142, guid: 64f15d0091aa36a4f835370cf8d80e24, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395402502347913142, guid: 64f15d0091aa36a4f835370cf8d80e24, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 10.014073
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395402502347913142, guid: 64f15d0091aa36a4f835370cf8d80e24, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395402502347913142, guid: 64f15d0091aa36a4f835370cf8d80e24, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395402502347913142, guid: 64f15d0091aa36a4f835370cf8d80e24, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395402502347913142, guid: 64f15d0091aa36a4f835370cf8d80e24, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395402502347913142, guid: 64f15d0091aa36a4f835370cf8d80e24, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395402502347913142, guid: 64f15d0091aa36a4f835370cf8d80e24, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395402502347913142, guid: 64f15d0091aa36a4f835370cf8d80e24, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4870508012201745823, guid: 64f15d0091aa36a4f835370cf8d80e24, type: 3}
-      propertyPath: m_Name
-      value: TankHolder
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 64f15d0091aa36a4f835370cf8d80e24, type: 3}
 --- !u!1 &319967964
 GameObject:
   m_ObjectHideFlags: 0
@@ -1258,7 +1201,7 @@ Transform:
   m_GameObject: {fileID: 1806579227}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 8.56}
+  m_LocalPosition: {x: 3.86, y: 1, z: -4.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1486,15 +1429,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0494246234e647a48892f937dedb8471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_aTarget: {fileID: 1806579237}
+  m_aTarget: {fileID: 0}
   m_steeringVars:
     maxVel: 0
     maxForce: 0
     maxSpeed: 0
     slowingRadius: 0
     m_proximity: 0
-  m_targetPos: {x: 0, y: 0, z: 0}
-  m_pos: {x: 0, y: 0, z: 0}
   m_currentVel: {x: 0, y: 0, z: 0}
   rotationSpeed: 0
   attackCoolDown: 0
@@ -1569,4 +1510,3 @@ SceneRoots:
   - {fileID: 1806579231}
   - {fileID: 578218706}
   - {fileID: 320580105}
-  - {fileID: 123052018}

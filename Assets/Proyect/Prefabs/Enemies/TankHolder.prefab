@@ -308,14 +308,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c12f4a24f3c2ef4d8ca8b02f06f852f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_aTarget: {fileID: 0}
   m_steeringVars:
     maxVel: 0
     maxForce: 0
     maxSpeed: 0
     slowingRadius: 0
     m_proximity: 0
-  m_targetPos: {x: 0, y: 0, z: 0}
-  m_pos: {x: 0, y: 0, z: 0}
   m_currentVel: {x: 0, y: 0, z: 0}
   rotationSpeed: 5
   attackCoolDown: 2

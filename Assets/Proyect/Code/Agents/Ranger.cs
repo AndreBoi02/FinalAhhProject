@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class Ranger : Agent {
 
+    protected override void Start() {
+        SetBehavior(new FleeBehaviour());
+    }
+
     protected override void Move() {
         if (DistanceFromPlayer() >= 7f) {
             if (!OnAttackCoolDown()) {
@@ -11,7 +15,7 @@ public class Ranger : Agent {
             m_rb.linearVelocity = Vector3.zero;
         }
         else {
-            EnemyBehaviour.Flee(this);
+            m_currentBehaviour?.Execute(this);
             m_rb.linearVelocity = m_currentVel;
         }
     }

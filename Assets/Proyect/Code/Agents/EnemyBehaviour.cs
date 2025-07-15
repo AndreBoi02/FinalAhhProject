@@ -20,9 +20,8 @@ public static class EnemyBehaviour {
     /// Design Note: Tune slowingRadius for "personality" (aggressive/gentle stops).
     /// </remarks>
     public static void Seek(Agent t_agent) {
-        Vector3 desiredVel = t_agent.GetTargetAgent().m_pos - t_agent.m_pos;
-        //float distance = DistanceV(t_agent.m_pos, t_agent.aTarget.m_pos);
-        float distance = Vector3.Distance(t_agent.m_pos, t_agent.GetTargetAgent().m_pos);
+        Vector3 desiredVel = t_agent.GetTargetPos() - t_agent.GetCurrentPos();
+        float distance = Vector3.Distance(t_agent.GetCurrentPos(), t_agent.GetTargetPos());
         BaseBehaviour(desiredVel, t_agent);
         Arrive(t_agent, distance);
     }
@@ -39,7 +38,7 @@ public static class EnemyBehaviour {
     /// For coordinated evasion, combine with obstacle avoidance.
     /// </remarks>
     public static void Flee(Agent t_agent) {
-        Vector3 desiredVel = t_agent.m_pos - t_agent.GetTargetAgent().m_pos;
+        Vector3 desiredVel = t_agent.GetCurrentPos() - t_agent.GetTargetPos();
         BaseBehaviour(desiredVel, t_agent);
     }
 
@@ -57,7 +56,7 @@ public static class EnemyBehaviour {
     static void Arrive(Agent t_agent, float t_distance) { 
         if (t_distance <= t_agent.GetSteeringVars().slowingRadius) {
             float slowing = t_distance / t_agent.GetSteeringVars().slowingRadius;
-            t_agent.m_currentVel *= slowing;
+            t_agent.SetCurrentVel(t_agent.GetCurrentVel() * slowing);
         }
     }
 
@@ -81,12 +80,13 @@ public static class EnemyBehaviour {
     /// integrate with ForceMode.Acceleration.
     /// </remarks>
     static void BaseBehaviour(Vector3 t_desiredVel, Agent t_agent) {
+
         // Convert to direction vector and scale to max speed
         t_desiredVel = t_desiredVel.normalized;
         t_desiredVel *= t_agent.GetSteeringVars().maxVel;
 
         // Calculate steering force (change needed)
-        Vector3 steering = t_desiredVel - t_agent.m_currentVel;
+        Vector3 steering = t_desiredVel - t_agent.GetCurrentVel();
 
         // Limit steering force magnitude
         steering = TruncateVec(steering, t_agent.GetSteeringVars().maxForce);
@@ -95,7 +95,7 @@ public static class EnemyBehaviour {
         steering /= t_agent.GetRigidbody().mass;
 
         // Update velocity with steering force (clamped to max speed)
-        t_agent.m_currentVel = TruncateVec(t_agent.m_currentVel + steering, t_agent.GetSteeringVars().maxSpeed);
+        t_agent.SetCurrentVel(TruncateVec(t_agent.GetCurrentVel() + steering, t_agent.GetSteeringVars().maxSpeed));
     }
 
     #endregion
