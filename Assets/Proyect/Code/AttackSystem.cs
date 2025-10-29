@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class AttackSystem : MonoBehaviour {
-    Action attackFunction;
+    Action prepareAttackFunction;
+    Action executeAttackFunction;
+
     public enum AttackType {
-        sword,
-        bow,
+        melee,
+        range,
         magic
     }
     [Header ("CurrentWeapon")]
@@ -15,75 +16,139 @@ public class AttackSystem : MonoBehaviour {
     int weaponIdx = 0;
 
     [Header("WeaponsReferences")]
-    [SerializeField] GameObject sword;
-    [SerializeField] GameObject proyectile;
+    [SerializeField] GameObject _sword;
+    [SerializeField] GameObject _proyectile;
+    [SerializeField] GameObject _fireBall;
+    [SerializeField] GameObject _fireBallPV;
+
+    Vector3 worldPos;
+    GameObject tempObject;
+
+
+    private IAttackSystem attacker;
 
     void Start() {
-        SwitchBetweenWeapons();
-        if (sword == null)
-            return;
-        sword?.SetActive(false);
+        attacker = GetComponent<IAttackSystem>();
+
+        if (attacker != null) {
+            attacker.OnPrepareAttack += StartAttack;
+            attacker.OnAttack += ExecuteAttack;
+            attacker.OnNextWeapon += NextWeapon;
+            attacker.OnPrevWeapon += PrevWeapon;
+        }
+
+        SwitchBetweenWeapons();;
+        _sword?.SetActive(false);
+    }
+
+    private void FixedUpdate() {
+        if(tempObject != null)
+            tempObject.transform.position = worldPos;
+    }
+
+    void OnDestroy() {
+        if (attacker != null) {
+            attacker.OnPrepareAttack -= StartAttack;
+            attacker.OnAttack -= ExecuteAttack;
+            attacker.OnNextWeapon -= NextWeapon;
+            attacker.OnPrevWeapon -= PrevWeapon;
+        }
     }
 
     void SwitchBetweenWeapons() {
         switch (weapon) {
-            case AttackType.sword:
-                attackFunction = SwordAttack;
+            case AttackType.melee:
+                executeAttackFunction = SwordAttack;
                 break;
-            case AttackType.bow:
-                attackFunction = bowAttack;
+            case AttackType.range:
+                executeAttackFunction = BowAttack;
                 break;
             case AttackType.magic:
-                attackFunction = MagicAttack;
+                prepareAttackFunction = PrepareMagicAttack;
+                executeAttackFunction = ExecuteMagicAttack;
                 break;
             default:
                 break;  
         }
     }
 
-    public void ExecuteAttack(InputAction.CallbackContext context) {
-        if(context.performed)
-            attackFunction();
+    void StartAttack() {
+        Debug.Log($"Preparing attack: {weapon}");
+        prepareAttackFunction();
     }
 
-    public void ExecuteAttack() {
-        attackFunction();
+    void ExecuteAttack() {
+        Debug.Log($"Executing attack: {weapon}");
+        executeAttackFunction();
     }
 
-    public void NextWeapon(InputAction.CallbackContext context) {
-        if (context.performed) {
-            weaponIdx = (weaponIdx + 1) % 3;
-            weapon = (AttackType)weaponIdx;
-            SwitchBetweenWeapons();
-        }
+    void NextWeapon() {
+        weaponIdx = (weaponIdx + 1) % 3;
+        weapon = (AttackType)weaponIdx;
+        Debug.Log($"Next weapon: {weapon}");
+        SwitchBetweenWeapons();
     }
 
-    public void PrevWeapon(InputAction.CallbackContext context) {
-        if (context.performed) {
-            weaponIdx = (weaponIdx - 1 + 3) % 3;
-            weapon = (AttackType)weaponIdx;
-            SwitchBetweenWeapons();
-        }
+    void PrevWeapon() {
+        weaponIdx = (weaponIdx - 1 + 3) % 3;
+        weapon = (AttackType)weaponIdx;
+        Debug.Log($"Next weapon: {weapon}");
+        SwitchBetweenWeapons();
     }
+
+    #region Sword
 
     void SwordAttack() {
+        Debug.Log("Sword Attack!");
         StartCoroutine(TurnOnAndOffTheSword());
     }
 
     IEnumerator TurnOnAndOffTheSword() {
-        sword?.SetActive(true);
+        _sword?.SetActive(true);
         yield return new WaitForSeconds(.5f);
-        sword?.SetActive(false);
+        _sword?.SetActive(false);
     }
 
-    void bowAttack() {
-        if (proyectile == null)
+    #endregion
+
+    #region Bow
+
+    void BowAttack() {
+        Debug.Log("Bow Attack!");
+        if (_proyectile == null)
             return;
         GameObject tempProyectile;
-        tempProyectile = Instantiate(proyectile, transform.position, transform.localRotation);
+        tempProyectile = Instantiate(_proyectile, transform.position, transform.localRotation);
     }
 
-    void MagicAttack() {
-        Debug.Log("El hechicero con sus poderes!!!");
+    #endregion
+
+    #region Magic
+
+    void PrepareMagicAttack() {
+        Debug.Log("Magic Attack!");
+        tempObject = Instantiate(_fireBallPV, worldPos, Quaternion.identity);
+    }
+
+    void ExecuteMagicAttack() {
+        if (tempObject != null) {
+            Destroy(tempObject);
+        }
+        CreateFireBall();
+    }
+
+    void CreateFireBall() {
+        GameObject _tempfb = Instantiate(_fireBall, transform.position, Quaternion.identity);
+        Fireball fireball = _tempfb.GetComponent<Fireball>();
+
+        if (fireball != null) {
+            fireball.LaunchTowards(worldPos, 3, -15f);
+        }
+    }
+
+    #endregion
+
+    public void SetWorldPosVector(Vector3 val) {
+        worldPos = val;
     }
 }

@@ -10,7 +10,7 @@ public class Ranger : Agent {
         if (DistanceFromPlayer() >= 7f) {
             if (!OnAttackCoolDown()) {
                 FacePlayer();
-                attackSystem.ExecuteAttack();
+                base.InvokeOnAttack();
             }
             m_rb.linearVelocity = Vector3.zero;
         }

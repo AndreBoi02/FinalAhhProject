@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: TankVars
   m_EditorClassIdentifier: 
   SteeringVars:
-    maxVel: 5
-    maxForce: 1
-    maxSpeed: 5
+    maxVel: 4
+    maxForce: 3
+    maxSpeed: 6
     slowingRadius: 3
     m_proximity: 0
+    m_displacement: 0
+    m_radius: 0

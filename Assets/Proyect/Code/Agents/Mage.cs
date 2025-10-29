@@ -1,16 +1,12 @@
-using UnityEngine;
+public class Mage : Agent {
+    ISteeringBehaviour m_steeringBehaviour;
 
-public class Mage : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
+    protected override void Start() {
+        SetBehavior(new WanderBehaviour());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    protected override void Move() {
+        m_steeringBehaviour?.Execute(this);
+        m_rb.linearVelocity = m_currentVel;
     }
 }

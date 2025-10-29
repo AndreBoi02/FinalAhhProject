@@ -85,5 +85,10 @@ public abstract class SteeringBehaviour : ISteeringBehaviour {
         return t_v.normalized * t_limit;
     }
 
+    protected Vector3 RandomVector() {
+        Vector2 random = Random.insideUnitCircle;
+        return new Vector3(random.x, 0, random.y);
+    }
+
     public abstract void Execute(Agent t_agent);
 }

@@ -1,7 +1,6 @@
 using UnityEngine;
 
 public class Tank : Agent {
-
     protected override void Start() {
         SetBehavior(new PursuitBehaviour());
     }
@@ -10,7 +9,7 @@ public class Tank : Agent {
         FacePlayer();
         if (DistanceFromPlayer() <= 1.5f) {
             if (!OnAttackCoolDown()) {
-                attackSystem.ExecuteAttack();
+                base.InvokeOnAttack();
             }
             m_rb.linearVelocity = Vector3.zero;
         }

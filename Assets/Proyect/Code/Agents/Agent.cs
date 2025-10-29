@@ -23,14 +23,26 @@ public struct SteeringVars{
         " \n ↓ Decrease → The agent brakes late (may overshoot the target).")]
     [SerializeField] public float slowingRadius;
 
-    [Tooltip("Not used now")]
+    [Tooltip("Minimum distance threshold to trigger new wander points" +
+        " \n ↑ Increase → Agent changes direction less frequently (longer paths)." +
+        " \n ↓ Decrease → Agent changes direction more often (erratic movement).")]
     [SerializeField] public float m_proximity;
+
+    [Tooltip("Forward projection distance for wander point generation" +
+        " \n ↑ Increase → Points appear farther ahead (smoother turns)." +
+        " \n ↓ Decrease → Points appear closer (sharper turns).")]
+    [SerializeField] public float m_displacement;
+
+    [Tooltip("Circular area around displacement point for random wander targets" +
+        " \n ↑ Increase → Wider wandering area (more exploration)." +
+        " \n ↓ Decrease → Narrower wandering area (more linear movement).")]
+    [SerializeField] public float m_radius;
 }
 
 #endregion
 
 [RequireComponent(typeof(Rigidbody), typeof(AttackSystem))]
-public class Agent : MonoBehaviour {
+public abstract class Agent : MonoBehaviour, IAttackSystem {
     #region Enums
 
     protected enum typeOfBehaviours {
@@ -53,7 +65,6 @@ public class Agent : MonoBehaviour {
     #region Runtime Var
 
     protected Vector3 m_pos => transform.position;
-    //protected Vector3 m_targetPos => m_aTarget != null ? m_aTarget.transform.position:Vector3.zero;
     protected Vector3 m_targetPos;
     protected Vector3 m_currentVel;
     protected typeOfBehaviours type = typeOfBehaviours.Seek;
@@ -73,14 +84,15 @@ public class Agent : MonoBehaviour {
      
     protected virtual void Move() { }
 
-    protected void SetBehavior(ISteeringBehaviour newBehaviour) {
-        m_currentBehaviour = newBehaviour;
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position + transform.forward * m_steeringVars.m_displacement, m_steeringVars.m_radius);
     }
 
     #region Getters & Setters
 
     public Agent GetTarget() {
-        return m_aTarget; 
+    return m_aTarget; 
     }
     
     public Rigidbody GetRigidbody() {
@@ -119,6 +131,10 @@ public class Agent : MonoBehaviour {
         m_aTarget = t_agent;
     }
 
+    protected void SetBehavior(ISteeringBehaviour newBehaviour) {
+        m_currentBehaviour = newBehaviour;
+    }
+
     #endregion
 
     #region Trash
@@ -155,4 +171,14 @@ public class Agent : MonoBehaviour {
         return true;
     }
     #endregion
+
+    public virtual event System.Action OnPrepareAttack;
+    public virtual event System.Action OnAttack;
+    public virtual event System.Action OnNextWeapon;
+    public virtual event System.Action OnPrevWeapon;
+    public AttackSystem AttackSystem => GetComponent<AttackSystem>();
+
+    protected virtual void InvokeOnAttack() {
+        OnAttack?.Invoke();
+    }
 }
