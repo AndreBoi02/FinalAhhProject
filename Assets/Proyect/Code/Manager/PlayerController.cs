@@ -138,6 +138,7 @@ namespace FinalProyect {
         public event System.Action OnPrevWeapon;
         public AttackSystem AttackSystem => GetComponent<AttackSystem>();
         bool _isMouseDown = false;
+
         public void OnClickDonw(InputAction.CallbackContext context) {
             if (context.performed && AttackSystem.weapon == AttackSystem.AttackType.magic) {
                 OnPrepareAttack?.Invoke();
@@ -155,14 +156,12 @@ namespace FinalProyect {
         public void NextWeapon(InputAction.CallbackContext context) {
             if (context.performed) {
                 OnNextWeapon?.Invoke();
-                print("E");
             }
         }
 
         public void PrevWeapon(InputAction.CallbackContext context) {
             if (context.performed) {
                 OnPrevWeapon?.Invoke();
-                print("Q");
             }
         }
 

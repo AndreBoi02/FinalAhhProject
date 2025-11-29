@@ -178,7 +178,13 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     public virtual event System.Action OnPrevWeapon;
     public AttackSystem AttackSystem => GetComponent<AttackSystem>();
 
+    protected virtual void PrepareOnAttack() {
+        OnPrepareAttack?.Invoke();
+    }
+
     protected virtual void InvokeOnAttack() {
         OnAttack?.Invoke();
     }
+
+    
 }

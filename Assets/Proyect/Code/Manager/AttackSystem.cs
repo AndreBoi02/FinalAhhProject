@@ -6,11 +6,14 @@ public class AttackSystem : MonoBehaviour {
     Action prepareAttackFunction;
     Action executeAttackFunction;
 
+    public Action<int> weaponChanged;
+
     public enum AttackType {
-        melee,
+        magic,
         range,
-        magic
+        melee
     }
+
     [Header ("CurrentWeapon")]
     public AttackType weapon;
     int weaponIdx = 0;
@@ -37,7 +40,9 @@ public class AttackSystem : MonoBehaviour {
             attacker.OnPrevWeapon += PrevWeapon;
         }
 
-        SwitchBetweenWeapons();;
+        SwitchBetweenWeapons();
+        if(_sword == null)
+            return;
         _sword?.SetActive(false);
     }
 
@@ -73,33 +78,30 @@ public class AttackSystem : MonoBehaviour {
     }
 
     void StartAttack() {
-        Debug.Log($"Preparing attack: {weapon}");
         prepareAttackFunction();
     }
 
     void ExecuteAttack() {
-        Debug.Log($"Executing attack: {weapon}");
         executeAttackFunction();
     }
 
     void NextWeapon() {
         weaponIdx = (weaponIdx + 1) % 3;
         weapon = (AttackType)weaponIdx;
-        Debug.Log($"Next weapon: {weapon}");
+        weaponChanged?.Invoke(weaponIdx);
         SwitchBetweenWeapons();
     }
 
     void PrevWeapon() {
         weaponIdx = (weaponIdx - 1 + 3) % 3;
         weapon = (AttackType)weaponIdx;
-        Debug.Log($"Next weapon: {weapon}");
+        weaponChanged?.Invoke(weaponIdx);
         SwitchBetweenWeapons();
     }
 
     #region Sword
 
     void SwordAttack() {
-        Debug.Log("Sword Attack!");
         StartCoroutine(TurnOnAndOffTheSword());
     }
 
@@ -114,7 +116,6 @@ public class AttackSystem : MonoBehaviour {
     #region Bow
 
     void BowAttack() {
-        Debug.Log("Bow Attack!");
         if (_proyectile == null)
             return;
         GameObject tempProyectile;
@@ -126,7 +127,6 @@ public class AttackSystem : MonoBehaviour {
     #region Magic
 
     void PrepareMagicAttack() {
-        Debug.Log("Magic Attack!");
         tempObject = Instantiate(_fireBallPV, worldPos, Quaternion.identity);
     }
 

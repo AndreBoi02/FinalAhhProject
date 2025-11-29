@@ -1,3 +1,6 @@
+using System.Collections;
+using UnityEngine;
+
 public class Mage : Agent {
     ISteeringBehaviour m_steeringBehaviour;
 
@@ -6,7 +9,23 @@ public class Mage : Agent {
     }
 
     protected override void Move() {
-        m_steeringBehaviour?.Execute(this);
-        m_rb.linearVelocity = m_currentVel;
+        if (DistanceFromPlayer() >= 7f) {
+            if (!OnAttackCoolDown()) {
+                FacePlayer();
+                AttackSystem.SetWorldPosVector(m_targetPos);
+                MagicAttack();
+            }
+        }
+    }
+
+    void MagicAttack() {
+        Debug.Log("MagicAttack");
+        StartCoroutine(InvokeMagic());
+    }
+
+    IEnumerator InvokeMagic() {
+        base.PrepareOnAttack();
+        yield return new WaitForSeconds(.5f);
+        base.InvokeOnAttack();
     }
 }
