@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 namespace FinalProyect {
     [RequireComponent(typeof(Rigidbody))]
@@ -18,6 +19,19 @@ namespace FinalProyect {
         [SerializeField] int normalSpeed;
         [SerializeField] int runnigSpeed;
         [SerializeField] int walkinigSpeed;
+
+        [SerializeField] float dashCountdown;
+
+        public Action<float> OnDashCDChanged;
+
+        public float DashCD {
+            get => dashCountdown;
+            set {
+                dashCountdown = value;
+                OnDashCDChanged?.Invoke(Mathf.Floor(dashCountdown * 100f) / 100f);
+            }
+        }
+
         int initialSpeed;
         public int Speed {
             get => normalSpeed;
@@ -76,8 +90,9 @@ namespace FinalProyect {
                 canDash = false;
                 rb.linearVelocity = Vector3.zero;
                 rb.AddForce(movementDir * dashSpeed, ForceMode.Impulse);
+                    dashCountdown = 0;
                 StartCoroutine(StopDashAndInmunity(0.2f));
-                StartCoroutine(DashCooldown(1f));
+                StartCoroutine(SmoothDashCooldown(1.5f));
             }
         }
 
@@ -87,13 +102,26 @@ namespace FinalProyect {
             } 
             yield return new WaitForSeconds(delay);
             if (rb) {
-                rb.linearVelocity = Vector3.zero;
+                rb.linearVelocity = movementDir * normalSpeed;
             }
             capsuleCollider.enabled = true;
         }
 
-        IEnumerator DashCooldown(float time) {
-            yield return new WaitForSeconds(time);
+        IEnumerator SmoothDashCooldown(float totalCooldownTime) {
+            float elapsedTime = 0f;
+
+            while (elapsedTime < totalCooldownTime) {
+                elapsedTime += Time.deltaTime;
+
+                float progress = Mathf.Clamp01(elapsedTime / totalCooldownTime);
+                float smoothProgress = Mathf.SmoothStep(0f, 1f, progress);
+
+                DashCD = smoothProgress * totalCooldownTime;
+
+                yield return null;
+            }
+
+            DashCD = totalCooldownTime;
             canDash = true;
         }
 

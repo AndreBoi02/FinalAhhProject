@@ -7,6 +7,7 @@ public class AttackSystem : MonoBehaviour {
     Action executeAttackFunction;
 
     public Action<int> weaponChanged;
+    StatHandler statHandler;
 
     public enum AttackType {
         magic,
@@ -32,6 +33,7 @@ public class AttackSystem : MonoBehaviour {
 
     void Start() {
         attacker = GetComponent<IAttackSystem>();
+        statHandler = GetComponent<StatHandler>();
 
         if (attacker != null) {
             attacker.OnPrepareAttack += StartAttack;
@@ -78,10 +80,15 @@ public class AttackSystem : MonoBehaviour {
     }
 
     void StartAttack() {
+        if(weapon == AttackType.magic && !statHandler.ManaAvailable())
+            return;
         prepareAttackFunction();
     }
 
     void ExecuteAttack() {
+        if ((weapon == AttackType.range && !statHandler.AmmoAvailable()) 
+            || (weapon == AttackType.magic && !statHandler.ManaAvailable()))
+            return;
         executeAttackFunction();
     }
 
@@ -118,8 +125,10 @@ public class AttackSystem : MonoBehaviour {
     void BowAttack() {
         if (_proyectile == null)
             return;
+
         GameObject tempProyectile;
         tempProyectile = Instantiate(_proyectile, transform.position, transform.localRotation);
+        statHandler.Ammo -= 1;
     }
 
     #endregion
@@ -135,6 +144,7 @@ public class AttackSystem : MonoBehaviour {
             Destroy(tempObject);
         }
         CreateFireBall();
+        statHandler.Mana -= 10;
     }
 
     void CreateFireBall() {

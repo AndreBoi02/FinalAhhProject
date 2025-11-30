@@ -1,11 +1,13 @@
+using FinalProyect;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HUDHandler : MonoBehaviour
-{
+public class HUDHandler : MonoBehaviour {
+    [Header("References")]
     [SerializeField] StatHandler stathandler;
     [SerializeField] AttackSystem attackSystem;
+    [SerializeField] PlayerController playerController; 
 
     [Header("Icons")]
     [SerializeField] Image weapongWheelIcon;
@@ -18,18 +20,26 @@ public class HUDHandler : MonoBehaviour
     [SerializeField] Image tomeIcon;
 
     [Header("Items' texts")]
-    [SerializeField] TMP_Text hpPotions;
-    [SerializeField] TMP_Text manaPotions;
-    [SerializeField] TMP_Text arrows;
+    [SerializeField] TMP_Text hpPotionsText;
+    [SerializeField] TMP_Text manaPotionsText;
+    [SerializeField] TMP_Text arrowsText;
 
     private void Awake() {
         stathandler = GameObject.Find("Player").GetComponent<StatHandler>();
         attackSystem = GameObject.Find("Player").GetComponent<AttackSystem>();
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+
         stathandler.OnHpChanged += UpdateHpIcon;
         stathandler.OnManaChanged += UpdateManaIcon;
+
+        stathandler.OnHpPotChanged += UpdateHpPotText;
+        stathandler.OnManaPotChanged += UpdateManaPotText;
         stathandler.OnAmmoChanged += UpdateAmmoText;
+
         attackSystem.weaponChanged += RotateWeaponWheel;
         attackSystem.weaponChanged += UpdateActualWeaponUsed;
+
+        playerController.OnDashCDChanged += UpdateDashIcon;
     }
 
     void UpdateHpIcon(float val) {
@@ -37,11 +47,23 @@ public class HUDHandler : MonoBehaviour
     }
 
     void UpdateManaIcon(float val) {
-        manaSkullIcon.fillAmount += val / 100;
+        manaSkullIcon.fillAmount = val / 50;
+    }
+    
+    void UpdateDashIcon(float val) {
+        dashIcon.fillAmount = val / 1.5f;
+    }
+
+    void UpdateHpPotText(float val) {
+        hpPotionsText.text = val.ToString();
+    }
+    
+    void UpdateManaPotText(float val) {
+        manaPotionsText.text = val.ToString();
     }
 
     void UpdateAmmoText(float val) {
-        arrows.text = val.ToString();
+        arrowsText.text = val.ToString();
     }
 
     [Header("WeaponWheel")]
@@ -73,16 +95,15 @@ public class HUDHandler : MonoBehaviour
             float timeSinceStart = Time.time - rotationStartTime;
             float progress = Mathf.Clamp01(timeSinceStart / rotationDuration);
 
-            // Lerp suave
             float smoothedProgress = Mathf.SmoothStep(0f, 1f, progress);
             float newAngle = Mathf.Lerp(currentAngle, targetAngle, smoothedProgress);
 
             weapongWheelIcon.transform.localRotation = Quaternion.Euler(0f, 0f, newAngle);
-            currentAngle = newAngle; // Actualizar el ángulo actual
+            currentAngle = newAngle;
 
             if (progress >= 1f) {
                 isRotating = false;
-                currentAngle = targetAngle; // Asegurar el valor exacto al final
+                currentAngle = targetAngle;
                 weapongWheelIcon.transform.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
             }
         }
@@ -95,21 +116,21 @@ public class HUDHandler : MonoBehaviour
                 bowIcon.gameObject.SetActive(false);
                 swordIcon.gameObject.SetActive(false);
                 quiverIcon.gameObject.SetActive(false);
-                arrows.gameObject.SetActive(false);
+                arrowsText.gameObject.SetActive(false);
                 break;
             case 1:
                 tomeIcon.gameObject.SetActive(false);
                 bowIcon.gameObject.SetActive(true);
                 swordIcon.gameObject.SetActive(false);
                 quiverIcon.gameObject.SetActive(true);
-                arrows.gameObject.SetActive(true);
+                arrowsText.gameObject.SetActive(true);
                 break;
             case 2:
                 tomeIcon.gameObject.SetActive(false);
                 bowIcon.gameObject.SetActive(false);
                 swordIcon.gameObject.SetActive(true);
                 quiverIcon.gameObject.SetActive(false);
-                arrows.gameObject.SetActive(false);
+                arrowsText.gameObject.SetActive(false);
                 break;
             default:
                 break;

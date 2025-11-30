@@ -453,7 +453,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &266876755
 RectTransform:
   m_ObjectHideFlags: 0
@@ -507,7 +507,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 215.1, y: 47.7}
+  m_AnchoredPosition: {x: 215.1, y: 47.69995}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &286959051
@@ -531,13 +531,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 2567871600f64b74180cdd36dc25ed58, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
   m_FillClockwise: 1
-  m_FillOrigin: 0
+  m_FillOrigin: 1
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!222 &286959052
@@ -1705,6 +1705,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stathandler: {fileID: 0}
   attackSystem: {fileID: 0}
+  playerController: {fileID: 0}
   weapongWheelIcon: {fileID: 1963780227}
   hpSkullIcon: {fileID: 330349146}
   manaSkullIcon: {fileID: 1973882418}
@@ -1713,9 +1714,9 @@ MonoBehaviour:
   swordIcon: {fileID: 585769888}
   bowIcon: {fileID: 240594708}
   tomeIcon: {fileID: 1365943371}
-  hpPotions: {fileID: 0}
-  manaPotions: {fileID: 0}
-  arrows: {fileID: 920552486}
+  hpPotionsText: {fileID: 1787288745}
+  manaPotionsText: {fileID: 109051450}
+  arrowsText: {fileID: 920552486}
   rotationDuration: 0.3
 --- !u!1 &1036215343
 GameObject:
@@ -2720,6 +2721,7 @@ MonoBehaviour:
   normalSpeed: 3
   runnigSpeed: 6
   walkinigSpeed: 1
+  dashCountdown: 0
   dashSpeed: 10
   _cam: {fileID: 330585545}
 --- !u!114 &1806579236
@@ -2775,8 +2777,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  mana: 20
-  ammo: 30
+  mana: 50
+  ammo: 15
+  hpPotion: 2
+  manaPotion: 3
 --- !u!1 &1821978633
 GameObject:
   m_ObjectHideFlags: 0
