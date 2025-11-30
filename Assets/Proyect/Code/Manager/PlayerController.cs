@@ -11,6 +11,8 @@ namespace FinalProyect {
         Rigidbody rb => GetComponent<Rigidbody>();
         CapsuleCollider capsuleCollider => GetComponent<CapsuleCollider>();
 
+        StatHandler statHandler => GetComponent<StatHandler>();
+
         #endregion  
 
         #region RunTimeVar
@@ -190,6 +192,38 @@ namespace FinalProyect {
         public void PrevWeapon(InputAction.CallbackContext context) {
             if (context.performed) {
                 OnPrevWeapon?.Invoke();
+            }
+        }
+
+        #endregion
+
+        #region PotionsMethods
+
+        public void UseHpPot(InputAction.CallbackContext context) {
+            if (context.performed && statHandler.HpPotAvailable() && statHandler.Health != 100) {
+                statHandler.HpPot -= 1;
+                if(statHandler.Health >= 81) {
+                    int wastedPot = ((int)statHandler.Health + 20) - 100;
+                    statHandler.Health = 100;
+                    print(wastedPot);
+                }
+                else {
+                    statHandler.Health += 20;
+                }
+            }
+        }
+
+        public void UseManaPot(InputAction.CallbackContext context) {
+            if (context.canceled && statHandler.ManaPotAvailable() && statHandler.Mana != 50) {
+                statHandler.ManaPot -= 1;
+                if (statHandler.Mana >= 36) {
+                    int wastedManaPot = ((int)statHandler.Mana + 15) - 50;
+                    statHandler.Mana = 50;
+                    print(wastedManaPot);
+                }
+                else {
+                    statHandler.Mana += 15;
+                }
             }
         }
 

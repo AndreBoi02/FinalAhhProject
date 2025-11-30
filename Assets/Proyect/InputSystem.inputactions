@@ -51,9 +51,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "QuickUseItem",
+                    "name": "ClosePanel",
+                    "type": "Button",
+                    "id": "c587e5c0-9ed5-4dff-a898-28a05e621c97",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "QuickUseHpPot",
                     "type": "Button",
                     "id": "08078244-f745-4659-aa07-fee8108c402c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "QuickUseManaPot",
+                    "type": "Button",
+                    "id": "4fb74d47-5cdf-4bcf-83e2-da0ca5ee6eb6",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -211,12 +229,78 @@
                 },
                 {
                     "name": "",
+                    "id": "1923ff37-f549-4793-b157-08ae4597b6b2",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2d537142-fef3-41aa-8f29-dad726723913",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ClosePanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "75f5de6b-baba-485a-bf1e-7dc364934489",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ClosePanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "2e5c37c3-8750-46e3-a2b4-181fcbb74dda",
                     "path": "",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "QuickUseItem",
+                    "action": "QuickUseHpPot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "72dfd57f-5a92-447b-9dbb-faf7a6ebc740",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QuickUseHpPot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1ad54fee-7497-443b-9c9a-e6beea85e3f5",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QuickUseManaPot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "02bec992-e8a6-4fb4-80b1-fd19c89e4a32",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QuickUseManaPot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -6,7 +6,6 @@ public class testDamage : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if (other.GetComponent<StatHandler>()) {
-            print(other.gameObject.name);
             other.GetComponent<StatHandler>().Health -= substractingVal;
         }
     }
