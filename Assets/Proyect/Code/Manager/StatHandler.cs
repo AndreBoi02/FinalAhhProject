@@ -1,24 +1,27 @@
-using System;
 using UnityEngine;
 
 public class StatHandler : MonoBehaviour {
-    public event Action<float> OnHpChanged;
-    public event Action<float> OnManaChanged;
-    public event Action<float> OnAmmoChanged;
-    public event Action<float> OnHpPotChanged;
-    public event Action<float> OnManaPotChanged;
-
     [SerializeField] float health;
     [SerializeField] float mana;
     [SerializeField] float ammo;
     [SerializeField] float hpPotion;
     [SerializeField] float manaPotion;
 
+    private void RaiseStatsEvent() {
+        EventBus<StatsEvent>.Raise(new StatsEvent {
+            health = health,
+            mana = mana,
+            ammo = ammo,
+            hpPot = hpPotion,
+            manaPot = manaPotion
+        });
+    }
+
     public float Health {
         get => health;
         set {
             health = value;
-            OnHpChanged?.Invoke(health);
+            RaiseStatsEvent();
         }
     }
 
@@ -26,7 +29,7 @@ public class StatHandler : MonoBehaviour {
         get => mana;
         set {
             mana = value;
-            OnManaChanged?.Invoke(mana);
+            RaiseStatsEvent();
         }
     }
 
@@ -34,7 +37,7 @@ public class StatHandler : MonoBehaviour {
         get => hpPotion;
         set {
             hpPotion = value;
-            OnHpPotChanged?.Invoke(hpPotion);
+            RaiseStatsEvent();
         }
     }
 
@@ -42,7 +45,7 @@ public class StatHandler : MonoBehaviour {
         get => manaPotion;
         set {
             manaPotion = value;
-            OnManaPotChanged?.Invoke(manaPotion);
+            RaiseStatsEvent();
         }
     }
 
@@ -50,7 +53,7 @@ public class StatHandler : MonoBehaviour {
         get => ammo;
         set {
             ammo = value;
-            OnAmmoChanged?.Invoke(ammo);
+            RaiseStatsEvent();
         }
     }
 
@@ -90,10 +93,6 @@ public class StatHandler : MonoBehaviour {
     }
 
     private void Start() {
-        OnHpChanged?.Invoke(Health);
-        OnManaChanged?.Invoke(Mana);
-        OnHpPotChanged?.Invoke(HpPot);
-        OnManaPotChanged?.Invoke(ManaPot);
-        OnAmmoChanged?.Invoke(Ammo);
+        RaiseStatsEvent();
     }
 }

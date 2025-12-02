@@ -1,14 +1,8 @@
-using FinalProyect;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HUDHandler : MonoBehaviour {
-    [Header("References")]
-    [SerializeField] StatHandler stathandler;
-    [SerializeField] AttackSystem attackSystem;
-    [SerializeField] PlayerController playerController; 
-
     [Header("Icons")]
     [SerializeField] Image weapongWheelIcon;
     [SerializeField] Image hpSkullIcon;
@@ -24,46 +18,41 @@ public class HUDHandler : MonoBehaviour {
     [SerializeField] TMP_Text manaPotionsText;
     [SerializeField] TMP_Text arrowsText;
 
-    private void Awake() {
-        stathandler = GameObject.Find("Player").GetComponent<StatHandler>();
-        attackSystem = GameObject.Find("Player").GetComponent<AttackSystem>();
-        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+    EventBinding<StatsEvent> statsEventBinding;
+    EventBinding<DashEvent> dashEventBinding;
+    EventBinding<WeaponWheelEvent> weaponWheelEventBinding;
 
-        stathandler.OnHpChanged += UpdateHpIcon;
-        stathandler.OnManaChanged += UpdateManaIcon;
+    private void OnEnable() {
+        statsEventBinding = new EventBinding<StatsEvent>(UpdateStats);
+        EventBus<StatsEvent>.Register(statsEventBinding);
 
-        stathandler.OnHpPotChanged += UpdateHpPotText;
-        stathandler.OnManaPotChanged += UpdateManaPotText;
-        stathandler.OnAmmoChanged += UpdateAmmoText;
+        dashEventBinding = new EventBinding<DashEvent>(UpdateDashIcon);
+        EventBus<DashEvent>.Register(dashEventBinding);
 
-        attackSystem.weaponChanged += RotateWeaponWheel;
-        attackSystem.weaponChanged += UpdateActualWeaponUsed;
-
-        playerController.OnDashCDChanged += UpdateDashIcon;
+        weaponWheelEventBinding = new EventBinding<WeaponWheelEvent>(RotateWeaponWheel);
+        EventBus<WeaponWheelEvent>.Register(weaponWheelEventBinding);
+        weaponWheelEventBinding = new EventBinding<WeaponWheelEvent>(UpdateActualWeaponUsed);
+        EventBus<WeaponWheelEvent>.Register(weaponWheelEventBinding);
     }
 
-    void UpdateHpIcon(float val) {
-        hpSkullIcon.fillAmount = val / 100;
+    private void OnDisable() {
+        EventBus<StatsEvent>.Deregister(statsEventBinding);
+
+        EventBus<DashEvent>.Deregister(dashEventBinding);
+
+        EventBus<WeaponWheelEvent>.Deregister(weaponWheelEventBinding);
     }
 
-    void UpdateManaIcon(float val) {
-        manaSkullIcon.fillAmount = val / 50;
+    void UpdateStats(StatsEvent statsEvent) {
+        hpSkullIcon.fillAmount = statsEvent.health / 100;
+        manaSkullIcon.fillAmount = statsEvent.mana / 50;
+        hpPotionsText.text = statsEvent.hpPot.ToString();
+        manaPotionsText.text = statsEvent.manaPot.ToString();
+        arrowsText.text = statsEvent.ammo.ToString();
     }
     
-    void UpdateDashIcon(float val) {
-        dashIcon.fillAmount = val / 1.5f;
-    }
-
-    void UpdateHpPotText(float val) {
-        hpPotionsText.text = val.ToString();
-    }
-    
-    void UpdateManaPotText(float val) {
-        manaPotionsText.text = val.ToString();
-    }
-
-    void UpdateAmmoText(float val) {
-        arrowsText.text = val.ToString();
+    void UpdateDashIcon(DashEvent dashEvent) {
+        dashIcon.fillAmount = dashEvent.OnDashCDChanged / 1.5f;
     }
 
     [Header("WeaponWheel")]
@@ -74,20 +63,18 @@ public class HUDHandler : MonoBehaviour {
     bool isRotating = false;
     int lastWeaponIndex = 0;
 
-    void RotateWeaponWheel(int newWeaponIndex) {
-        // Calcular la diferencia para determinar la dirección más corta
-        int difference = newWeaponIndex - lastWeaponIndex;
+    void RotateWeaponWheel(WeaponWheelEvent weaponWheelEvent) {
 
-        // Ajustar para el caso de dar la vuelta (de 2 a 0 o de 0 a 2)
-        if (difference > 1) difference = -1; // De 2 a 0 es como -1 en sentido antihorario
-        if (difference < -1) difference = 1;  // De 0 a 2 es como +1 en sentido horario
+        int difference = weaponWheelEvent.weaponWheelIdx - lastWeaponIndex;
 
-        // Rotar en la dirección correcta
+        if (difference > 1) difference = -1;
+        if (difference < -1) difference = 1;
+
         targetAngle = currentAngle + (difference * 120f);
 
         rotationStartTime = Time.time;
         isRotating = true;
-        lastWeaponIndex = newWeaponIndex;
+        lastWeaponIndex = weaponWheelEvent.weaponWheelIdx;
     }
 
     void Update() {
@@ -109,8 +96,8 @@ public class HUDHandler : MonoBehaviour {
         }
     }
 
-    void UpdateActualWeaponUsed(int currentWeaponIndex) {
-        switch (currentWeaponIndex) {
+    void UpdateActualWeaponUsed(WeaponWheelEvent weaponWheelEvent) {
+        switch (weaponWheelEvent.weaponWheelIdx) {
             case 0:
                 tomeIcon.gameObject.SetActive(true);
                 bowIcon.gameObject.SetActive(false);

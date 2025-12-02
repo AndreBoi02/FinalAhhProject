@@ -24,13 +24,13 @@ namespace FinalProyect {
 
         [SerializeField] float dashCountdown;
 
-        public Action<float> OnDashCDChanged;
-
         public float DashCD {
             get => dashCountdown;
             set {
                 dashCountdown = value;
-                OnDashCDChanged?.Invoke(Mathf.Floor(dashCountdown * 100f) / 100f);
+                EventBus<DashEvent>.Raise(new DashEvent {
+                    OnDashCDChanged = Mathf.Floor(dashCountdown * 100f) / 100f
+                });
             }
         }
 

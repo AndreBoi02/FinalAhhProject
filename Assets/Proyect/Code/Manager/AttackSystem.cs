@@ -6,7 +6,6 @@ public class AttackSystem : MonoBehaviour {
     Action prepareAttackFunction;
     Action executeAttackFunction;
 
-    public Action<int> weaponChanged;
     StatHandler statHandler;
 
     public enum AttackType {
@@ -33,6 +32,7 @@ public class AttackSystem : MonoBehaviour {
 
     void Start() {
         attacker = GetComponent<IAttackSystem>();
+
         statHandler = GetComponent<StatHandler>();
 
         if (attacker != null) {
@@ -95,14 +95,18 @@ public class AttackSystem : MonoBehaviour {
     void NextWeapon() {
         weaponIdx = (weaponIdx + 1) % 3;
         weapon = (AttackType)weaponIdx;
-        weaponChanged?.Invoke(weaponIdx);
+        EventBus<WeaponWheelEvent>.Raise(new WeaponWheelEvent {
+            weaponWheelIdx = weaponIdx
+        });
         SwitchBetweenWeapons();
     }
 
     void PrevWeapon() {
         weaponIdx = (weaponIdx - 1 + 3) % 3;
         weapon = (AttackType)weaponIdx;
-        weaponChanged?.Invoke(weaponIdx);
+        EventBus<WeaponWheelEvent>.Raise(new WeaponWheelEvent {
+            weaponWheelIdx = weaponIdx
+        });
         SwitchBetweenWeapons();
     }
 

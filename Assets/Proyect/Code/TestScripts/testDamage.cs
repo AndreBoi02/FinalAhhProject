@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class testDamage : MonoBehaviour {
-    [SerializeField] float substractingVal;
+    [SerializeField] int substractingVal;
     [SerializeField] float addingVal;
 
     private void OnTriggerEnter(Collider other) {
