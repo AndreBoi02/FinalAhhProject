@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static CombatEvent;
 
 public class HUDHandler : MonoBehaviour {
     [Header("Icons")]
@@ -20,7 +21,7 @@ public class HUDHandler : MonoBehaviour {
 
     EventBinding<StatsEvent> statsEventBinding;
     EventBinding<DashEvent> dashEventBinding;
-    EventBinding<WeaponWheelEvent> weaponWheelEventBinding;
+    EventBinding<WeaponChangedEvent> weaponChangedEventBinding;
 
     private void OnEnable() {
         statsEventBinding = new EventBinding<StatsEvent>(UpdateStats);
@@ -29,10 +30,8 @@ public class HUDHandler : MonoBehaviour {
         dashEventBinding = new EventBinding<DashEvent>(UpdateDashIcon);
         EventBus<DashEvent>.Register(dashEventBinding);
 
-        weaponWheelEventBinding = new EventBinding<WeaponWheelEvent>(RotateWeaponWheel);
-        EventBus<WeaponWheelEvent>.Register(weaponWheelEventBinding);
-        weaponWheelEventBinding = new EventBinding<WeaponWheelEvent>(UpdateActualWeaponUsed);
-        EventBus<WeaponWheelEvent>.Register(weaponWheelEventBinding);
+        weaponChangedEventBinding = new EventBinding<WeaponChangedEvent>(OnWeaponChanged);
+        EventBus<WeaponChangedEvent>.Register(weaponChangedEventBinding);
     }
 
     private void OnDisable() {
@@ -40,7 +39,14 @@ public class HUDHandler : MonoBehaviour {
 
         EventBus<DashEvent>.Deregister(dashEventBinding);
 
-        EventBus<WeaponWheelEvent>.Deregister(weaponWheelEventBinding);
+        EventBus<WeaponChangedEvent>.Deregister(weaponChangedEventBinding);
+    }
+
+    void OnWeaponChanged(WeaponChangedEvent weaponEvent) {
+        if (!weaponEvent.isPlayer) return;
+
+        RotateWeaponWheel(weaponEvent.weaponIndex);
+        UpdateActualWeaponUsed(weaponEvent.weaponIndex);
     }
 
     void UpdateStats(StatsEvent statsEvent) {
@@ -57,47 +63,52 @@ public class HUDHandler : MonoBehaviour {
 
     [Header("WeaponWheel")]
     public float rotationDuration = 0.3f;
-    float targetAngle = 0f;
-    float currentAngle = 0f;
+    private float _targetAngle = 0f;
+    private float _currentAngle = 0f;
     float rotationStartTime;
-    bool isRotating = false;
+    public bool isRotating = false;
     int lastWeaponIndex = 0;
 
-    void RotateWeaponWheel(WeaponWheelEvent weaponWheelEvent) {
+    public float CurrentTargetAngle => _targetAngle;
+    public float CurrentAngle => _currentAngle;
 
-        int difference = weaponWheelEvent.weaponWheelIdx - lastWeaponIndex;
+
+    void RotateWeaponWheel(int i) {
+
+        int difference = i - lastWeaponIndex;
 
         if (difference > 1) difference = -1;
         if (difference < -1) difference = 1;
 
-        targetAngle = currentAngle + (difference * 120f);
+        _targetAngle = _currentAngle + (difference * 120f);
 
         rotationStartTime = Time.time;
         isRotating = true;
-        lastWeaponIndex = weaponWheelEvent.weaponWheelIdx;
+        lastWeaponIndex = i;
     }
 
     void Update() {
         if (isRotating) {
+            
             float timeSinceStart = Time.time - rotationStartTime;
             float progress = Mathf.Clamp01(timeSinceStart / rotationDuration);
 
             float smoothedProgress = Mathf.SmoothStep(0f, 1f, progress);
-            float newAngle = Mathf.Lerp(currentAngle, targetAngle, smoothedProgress);
+            float newAngle = Mathf.Lerp(_currentAngle, _targetAngle, smoothedProgress);
 
             weapongWheelIcon.transform.localRotation = Quaternion.Euler(0f, 0f, newAngle);
-            currentAngle = newAngle;
+            _currentAngle = newAngle;
 
             if (progress >= 1f) {
                 isRotating = false;
-                currentAngle = targetAngle;
-                weapongWheelIcon.transform.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
+                _currentAngle = _targetAngle;
+                weapongWheelIcon.transform.localRotation = Quaternion.Euler(0f, 0f, _currentAngle);
             }
         }
     }
 
-    void UpdateActualWeaponUsed(WeaponWheelEvent weaponWheelEvent) {
-        switch (weaponWheelEvent.weaponWheelIdx) {
+    void UpdateActualWeaponUsed(int weaponIdx) {
+        switch (weaponIdx) {
             case 0:
                 tomeIcon.gameObject.SetActive(true);
                 bowIcon.gameObject.SetActive(false);

@@ -1,6 +1,8 @@
+using FinalProyect;
 using System;
 using System.Collections;
 using UnityEngine;
+using static CombatEvent;
 
 public class AttackSystem : MonoBehaviour {
     Action prepareAttackFunction;
@@ -27,8 +29,14 @@ public class AttackSystem : MonoBehaviour {
     Vector3 worldPos;
     GameObject tempObject;
 
-
+    public AttackType CurrentWeapon => weapon;
+    public int CurrentWeaponIndex => weaponIdx;
     private IAttackSystem attacker;
+    public Vector3 WorldPosition => worldPos;
+    public bool IsPlayer => TryGetComponent<PlayerController>(out _);
+
+    EventBinding<OnNextWeapon> nextWeaponBinding;
+    EventBinding<OnPrevWeapon> prevWeaponBinding;
 
     void Start() {
         attacker = GetComponent<IAttackSystem>();
@@ -38,8 +46,11 @@ public class AttackSystem : MonoBehaviour {
         if (attacker != null) {
             attacker.OnPrepareAttack += StartAttack;
             attacker.OnAttack += ExecuteAttack;
-            attacker.OnNextWeapon += NextWeapon;
-            attacker.OnPrevWeapon += PrevWeapon;
+
+            nextWeaponBinding = new EventBinding<OnNextWeapon>(NextWeapon);
+            EventBus<OnNextWeapon>.Register(nextWeaponBinding);
+            prevWeaponBinding = new EventBinding<OnPrevWeapon>(PrevWeapon);
+            EventBus<OnPrevWeapon>.Register(prevWeaponBinding);
         }
 
         SwitchBetweenWeapons();
@@ -57,9 +68,37 @@ public class AttackSystem : MonoBehaviour {
         if (attacker != null) {
             attacker.OnPrepareAttack -= StartAttack;
             attacker.OnAttack -= ExecuteAttack;
-            attacker.OnNextWeapon -= NextWeapon;
-            attacker.OnPrevWeapon -= PrevWeapon;
+            EventBus<OnNextWeapon>.Deregister(nextWeaponBinding);
+            EventBus<OnPrevWeapon>.Deregister(prevWeaponBinding);
         }
+    }
+
+    public void RaisePrepareEvent() {
+        EventBus<AttackPrepareEvent>.Raise(new AttackPrepareEvent {
+            attacker = gameObject,
+            attackType = weapon,
+            targetPosition = worldPos,
+            isPlayer = IsPlayer
+        });
+    }
+
+    public void RaiseExecuteEvent() {
+        EventBus<AttackExecuteEvent>.Raise(new AttackExecuteEvent {
+            attacker = gameObject,
+            attackType = weapon,
+            position = transform.position,
+            targetPosition = worldPos,
+            isPlayer = IsPlayer
+        });
+    }
+
+    public void RaiseWeaponChangedEvent() {
+        bool isPlayer = TryGetComponent<PlayerController>(out _);
+        EventBus<WeaponChangedEvent>.Raise(new WeaponChangedEvent {
+            entity = gameObject,
+            weaponIndex = weaponIdx,
+            isPlayer = isPlayer
+        });
     }
 
     void SwitchBetweenWeapons() {
@@ -83,6 +122,7 @@ public class AttackSystem : MonoBehaviour {
         if(weapon == AttackType.magic && !statHandler.ManaAvailable())
             return;
         prepareAttackFunction();
+        RaisePrepareEvent();
     }
 
     void ExecuteAttack() {
@@ -90,23 +130,22 @@ public class AttackSystem : MonoBehaviour {
             || (weapon == AttackType.magic && !statHandler.ManaAvailable()))
             return;
         executeAttackFunction();
+        RaiseExecuteEvent();
     }
 
     void NextWeapon() {
         weaponIdx = (weaponIdx + 1) % 3;
         weapon = (AttackType)weaponIdx;
-        EventBus<WeaponWheelEvent>.Raise(new WeaponWheelEvent {
-            weaponWheelIdx = weaponIdx
-        });
+        bool isPlayer = TryGetComponent<PlayerController>(out _);
+        RaiseWeaponChangedEvent();
         SwitchBetweenWeapons();
     }
 
     void PrevWeapon() {
         weaponIdx = (weaponIdx - 1 + 3) % 3;
         weapon = (AttackType)weaponIdx;
-        EventBus<WeaponWheelEvent>.Raise(new WeaponWheelEvent {
-            weaponWheelIdx = weaponIdx
-        });
+        bool isPlayer = TryGetComponent<PlayerController>(out _);
+        RaiseWeaponChangedEvent();
         SwitchBetweenWeapons();
     }
 

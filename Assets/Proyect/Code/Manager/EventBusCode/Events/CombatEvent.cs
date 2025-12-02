@@ -22,4 +22,7 @@ public class CombatEvent : IEvent {
         public int weaponIndex;
         public bool isPlayer;
     }
+
+    public struct OnNextWeapon : IEvent { }
+    public struct OnPrevWeapon : IEvent { }
 }

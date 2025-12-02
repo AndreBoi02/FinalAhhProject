@@ -2682,8 +2682,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75f8c0b160e7c474bbfaffa220a25f20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackSystem: {fileID: 0}
-  playerController: {fileID: 0}
   weapongWheelIcon: {fileID: 1963780227}
   hpSkullIcon: {fileID: 330349146}
   manaSkullIcon: {fileID: 1973882418}
@@ -2696,6 +2694,7 @@ MonoBehaviour:
   manaPotionsText: {fileID: 109051450}
   arrowsText: {fileID: 920552486}
   rotationDuration: 0.3
+  isRotating: 0
 --- !u!1 &1036215343
 GameObject:
   m_ObjectHideFlags: 0
@@ -2818,7 +2817,6 @@ GameObject:
   - component: {fileID: 1092550769}
   - component: {fileID: 1092550768}
   - component: {fileID: 1092550767}
-  - component: {fileID: 1092550772}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -2929,20 +2927,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1092550772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1092550766}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8339436b451c414eb09d7fa90620869, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hp: 15
-  mana: 60
 --- !u!1 &1114086857
 GameObject:
   m_ObjectHideFlags: 0
@@ -4384,7 +4368,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1963780225}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.8181555, y: 1.6103745, z: 1.6103745}
   m_ConstrainProportionsScale: 0

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System;
+using static CombatEvent;
 
 namespace FinalProyect {
     [RequireComponent(typeof(Rigidbody))]
@@ -10,7 +10,7 @@ namespace FinalProyect {
 
         Rigidbody rb => GetComponent<Rigidbody>();
         CapsuleCollider capsuleCollider => GetComponent<CapsuleCollider>();
-
+        AttackSystem m_attackSystem => GetComponent<AttackSystem>();
         StatHandler statHandler => GetComponent<StatHandler>();
 
         #endregion  
@@ -92,7 +92,7 @@ namespace FinalProyect {
                 canDash = false;
                 rb.linearVelocity = Vector3.zero;
                 rb.AddForce(movementDir * dashSpeed, ForceMode.Impulse);
-                    dashCountdown = 0;
+                dashCountdown = 0;
                 StartCoroutine(StopDashAndInmunity(0.2f));
                 StartCoroutine(SmoothDashCooldown(1.5f));
             }
@@ -101,7 +101,7 @@ namespace FinalProyect {
         IEnumerator StopDashAndInmunity(float delay) {
             if (capsuleCollider) {
                 capsuleCollider.enabled = false;
-            } 
+            }
             yield return new WaitForSeconds(delay);
             if (rb) {
                 rb.linearVelocity = movementDir * normalSpeed;
@@ -148,7 +148,7 @@ namespace FinalProyect {
             worldPos = GetMouseWorldPosition();
             LookAtMouseDir(worldPos);
 
-            if(_isMouseDown)
+            if (_isMouseDown)
                 AttackSystem.SetWorldPosVector(worldPos);
         }
 
@@ -164,9 +164,8 @@ namespace FinalProyect {
 
         public event System.Action OnPrepareAttack;
         public event System.Action OnAttack;
-        public event System.Action OnNextWeapon;
-        public event System.Action OnPrevWeapon;
-        public AttackSystem AttackSystem => GetComponent<AttackSystem>();
+
+        public AttackSystem AttackSystem => m_attackSystem;
         bool _isMouseDown = false;
 
         public void OnClickDonw(InputAction.CallbackContext context) {
@@ -185,13 +184,13 @@ namespace FinalProyect {
 
         public void NextWeapon(InputAction.CallbackContext context) {
             if (context.performed) {
-                OnNextWeapon?.Invoke();
+                EventBus<OnNextWeapon>.Raise(new OnNextWeapon());
             }
         }
 
         public void PrevWeapon(InputAction.CallbackContext context) {
             if (context.performed) {
-                OnPrevWeapon?.Invoke();
+                EventBus<OnPrevWeapon>.Raise(new OnPrevWeapon());
             }
         }
 

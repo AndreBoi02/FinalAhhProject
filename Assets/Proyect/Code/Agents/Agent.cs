@@ -54,9 +54,8 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     #endregion
 
     #region References
-
+    protected AttackSystem m_attackSystem => GetComponent<AttackSystem>();
     protected Rigidbody m_rb => GetComponent<Rigidbody>();
-    protected AttackSystem attackSystem => GetComponent<AttackSystem>();
     [SerializeField] protected Agent m_aTarget;
     [SerializeField] SteeringVars m_steeringVars;
 
@@ -174,9 +173,8 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
 
     public virtual event System.Action OnPrepareAttack;
     public virtual event System.Action OnAttack;
-    public virtual event System.Action OnNextWeapon;
-    public virtual event System.Action OnPrevWeapon;
-    public AttackSystem AttackSystem => GetComponent<AttackSystem>();
+
+    public AttackSystem AttackSystem => m_attackSystem;
 
     protected virtual void PrepareOnAttack() {
         OnPrepareAttack?.Invoke();
@@ -185,6 +183,4 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     protected virtual void InvokeOnAttack() {
         OnAttack?.Invoke();
     }
-
-    
 }
