@@ -8,10 +8,10 @@ namespace FinalProyect {
     public class PlayerController : MonoBehaviour, IAttackSystem {
         #region References
 
-        Rigidbody rb => GetComponent<Rigidbody>();
-        CapsuleCollider capsuleCollider => GetComponent<CapsuleCollider>();
-        AttackSystem m_attackSystem => GetComponent<AttackSystem>();
-        StatHandler statHandler => GetComponent<StatHandler>();
+        [SerializeField] Rigidbody rb;
+        [SerializeField] CapsuleCollider capsuleCollider;
+        [SerializeField] AttackSystem m_attackSystem;
+        [SerializeField] StatHandler statHandler;
 
         #endregion  
 
@@ -154,7 +154,7 @@ namespace FinalProyect {
 
         void LookAtMouseDir(Vector3 worldPos) {
             Vector3 LookAt = worldPos - transform.position;
-            LookAt.y = transform.position.y;
+            LookAt.y = 0;
             transform.rotation = Quaternion.LookRotation(LookAt);
         }
 
@@ -169,7 +169,8 @@ namespace FinalProyect {
         bool _isMouseDown = false;
 
         public void OnClickDonw(InputAction.CallbackContext context) {
-            if (context.performed && AttackSystem.weapon == AttackSystem.AttackType.magic) {
+            if (context.performed && AttackSystem.weapon == AttackSystem.AttackType.magic ||
+                AttackSystem.weapon == AttackSystem.AttackType.range) {
                 OnPrepareAttack?.Invoke();
                 _isMouseDown = true;
             }

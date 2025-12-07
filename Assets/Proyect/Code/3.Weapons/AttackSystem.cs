@@ -22,6 +22,8 @@ public class AttackSystem : MonoBehaviour {
 
     [Header("WeaponsReferences")]
     [SerializeField] GameObject _sword;
+    [SerializeField] GameObject _bow;
+    [SerializeField] GameObject _tome;
     [SerializeField] GameObject _proyectile;
     [SerializeField] GameObject _fireBall;
     [SerializeField] GameObject _fireBallPV;
@@ -42,7 +44,6 @@ public class AttackSystem : MonoBehaviour {
         attacker = GetComponent<IAttackSystem>();
 
         statHandler = GetComponent<StatHandler>();
-
         if (attacker != null) {
             attacker.OnPrepareAttack += StartAttack;
             attacker.OnAttack += ExecuteAttack;
@@ -52,11 +53,7 @@ public class AttackSystem : MonoBehaviour {
             prevWeaponBinding = new EventBinding<OnPrevWeapon>(PrevWeapon);
             EventBus<OnPrevWeapon>.Register(prevWeaponBinding);
         }
-
         SwitchBetweenWeapons();
-        if(_sword == null)
-            return;
-        _sword?.SetActive(false);
     }
 
     private void FixedUpdate() {
@@ -104,14 +101,26 @@ public class AttackSystem : MonoBehaviour {
     void SwitchBetweenWeapons() {
         switch (weapon) {
             case AttackType.melee:
+                _sword.SetActive(true);
+                _bow.SetActive(false);
+                _tome.SetActive(false);
                 executeAttackFunction = SwordAttack;
+                
                 break;
             case AttackType.range:
+                prepareAttackFunction = ChargeBow;
                 executeAttackFunction = BowAttack;
+                _sword.SetActive(false);
+                _bow.SetActive(true);
+                _tome.SetActive(false);
+                
                 break;
             case AttackType.magic:
                 prepareAttackFunction = PrepareMagicAttack;
                 executeAttackFunction = ExecuteMagicAttack;
+                _sword.SetActive(false);
+                _bow.SetActive(false);
+                _tome.SetActive(true);
                 break;
             default:
                 break;  
@@ -119,8 +128,10 @@ public class AttackSystem : MonoBehaviour {
     }
 
     void StartAttack() {
-        if(weapon == AttackType.magic && !statHandler.ManaAvailable())
+        if( 
+            weapon == AttackType.range && !statHandler.AmmoAvailable())
             return;
+
         prepareAttackFunction();
         RaisePrepareEvent();
     }
@@ -153,22 +164,28 @@ public class AttackSystem : MonoBehaviour {
 
     void SwordAttack() {
         StartCoroutine(TurnOnAndOffTheSword());
+        StartCoroutine("CallAnimation");
     }
 
     IEnumerator TurnOnAndOffTheSword() {
-        _sword?.SetActive(true);
+        CallAnimation();
         yield return new WaitForSeconds(.5f);
-        _sword?.SetActive(false);
+        QuitAnimation();
     }
 
     #endregion
 
     #region Bow
 
+    void ChargeBow() {
+        CallAnimation();
+    }
+
     void BowAttack() {
         if (_proyectile == null)
             return;
 
+        QuitAnimation();
         GameObject tempProyectile;
         tempProyectile = Instantiate(_proyectile, transform.position, transform.localRotation);
         statHandler.Ammo -= 1;
@@ -180,6 +197,7 @@ public class AttackSystem : MonoBehaviour {
 
     void PrepareMagicAttack() {
         tempObject = Instantiate(_fireBallPV, worldPos, Quaternion.identity);
+        CallAnimation();
     }
 
     void ExecuteMagicAttack() {
@@ -187,6 +205,7 @@ public class AttackSystem : MonoBehaviour {
             Destroy(tempObject);
         }
         CreateFireBall();
+        QuitAnimation();
         statHandler.Mana -= 10;
     }
 
@@ -200,6 +219,26 @@ public class AttackSystem : MonoBehaviour {
     }
 
     #endregion
+
+    void CallAnimation() {
+        EventBus<AnimationEvent>.Raise(new AnimationEvent {
+            OnDead = false,
+            OnAttacking1 = weapon == AttackType.magic ? true : false,
+            OnAttacking2 = weapon == AttackType.melee ? true : false,
+            OnAttacking3 = weapon == AttackType.range ? true : false,
+            OnRunnig = false,
+        });
+    }
+
+    void QuitAnimation() {
+        EventBus<AnimationEvent>.Raise(new AnimationEvent {
+            OnDead = false,
+            OnAttacking1 = false,
+            OnAttacking2 = false,
+            OnAttacking3 = false,
+            OnRunnig = false,
+        });
+    }
 
     public void SetWorldPosVector(Vector3 val) {
         worldPos = val;
