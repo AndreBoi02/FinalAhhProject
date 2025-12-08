@@ -6,13 +6,15 @@ public class AnimationsController : MonoBehaviour {
     [SerializeField] Animator animator;
 
     EventBinding<AnimationEvent> animationEvent;
+    EventBinding<RunEvent> runningEvent;
+    EventBinding<DeathEvent> deathEvent;
 
     private void OnEnable() {
-        animationEvent = new EventBinding<AnimationEvent>(PlayDeath);
-        EventBus<AnimationEvent>.Register(animationEvent);
+        deathEvent = new EventBinding<DeathEvent>(PlayDeath);
+        EventBus<DeathEvent>.Register(deathEvent);
 
-        animationEvent = new EventBinding<AnimationEvent>(PlayRunning);
-        EventBus<AnimationEvent>.Register(animationEvent);
+        runningEvent = new EventBinding<RunEvent>(PlayRunning);
+        EventBus<RunEvent>.Register(runningEvent);
 
         animationEvent = new EventBinding<AnimationEvent>(PlayAttack1);
         EventBus<AnimationEvent>.Register(animationEvent);
@@ -25,15 +27,17 @@ public class AnimationsController : MonoBehaviour {
     }
 
     private void OnDisable() {
+        EventBus<DeathEvent>.Deregister(deathEvent);
+        EventBus<RunEvent>.Deregister(runningEvent);
         EventBus<AnimationEvent>.Deregister(animationEvent);
     }
 
-    void PlayDeath(AnimationEvent animationEvent) {
-        animator.SetBool("isDead", animationEvent.OnDead);
+    void PlayDeath(DeathEvent animationEvent) {
+        animator.SetBool("isDead", animationEvent.isDead);
     }
 
-    void PlayRunning(AnimationEvent animationEvent) {
-        animator.SetBool("isRunning", animationEvent.OnRunnig);
+    void PlayRunning(RunEvent animationEvent) {
+        animator.SetBool("isRunning", animationEvent.isRunnig);
     }
     
     void PlayAttack1(AnimationEvent animationEvent) {

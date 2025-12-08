@@ -71,11 +71,11 @@ public class StatHandler : MonoBehaviour {
         return false;
     }
 
-    public bool PlayerAlive() {
-        if (Health > 0) {
-            return true;
-        }
-        return false;
+    public void PlayerAlive() {
+        if (Health > 0) return;
+        EventBus<DeathEvent>.Raise(new DeathEvent {
+            isDead = true
+        });
     }
 
     public bool HpPotAvailable() {

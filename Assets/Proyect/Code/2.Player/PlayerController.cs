@@ -53,6 +53,10 @@ namespace FinalProyect {
             initialSpeed = Speed;
         }
 
+        void Update() {
+            statHandler.PlayerAlive();
+        }
+
         #endregion
 
         #region MovementMethods
@@ -62,10 +66,16 @@ namespace FinalProyect {
                 if (context.action.name == "Move") {
                     movementDir = new Vector3(context.ReadValue<Vector2>().x, 0, context.ReadValue<Vector2>().y).normalized;
                     rb.linearVelocity = movementDir * normalSpeed;
+                    EventBus<RunEvent>.Raise(new RunEvent {
+                        isRunnig = true
+                    });
                 }
             }
             else {
                 rb.linearVelocity = Vector3.zero;
+                EventBus<RunEvent>.Raise(new RunEvent {
+                    isRunnig = false
+                });
             }
         }
 

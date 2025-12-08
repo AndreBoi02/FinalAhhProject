@@ -222,21 +222,17 @@ public class AttackSystem : MonoBehaviour {
 
     void CallAnimation() {
         EventBus<AnimationEvent>.Raise(new AnimationEvent {
-            OnDead = false,
             OnAttacking1 = weapon == AttackType.magic ? true : false,
             OnAttacking2 = weapon == AttackType.melee ? true : false,
             OnAttacking3 = weapon == AttackType.range ? true : false,
-            OnRunnig = false,
         });
     }
 
     void QuitAnimation() {
         EventBus<AnimationEvent>.Raise(new AnimationEvent {
-            OnDead = false,
             OnAttacking1 = false,
             OnAttacking2 = false,
             OnAttacking3 = false,
-            OnRunnig = false,
         });
     }
 
