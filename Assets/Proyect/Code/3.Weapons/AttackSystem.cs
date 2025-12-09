@@ -48,6 +48,7 @@ public class AttackSystem : MonoBehaviour {
             attacker.OnPrepareAttack += StartAttack;
             attacker.OnAttack += ExecuteAttack;
 
+
             nextWeaponBinding = new EventBinding<OnNextWeapon>(NextWeapon);
             EventBus<OnNextWeapon>.Register(nextWeaponBinding);
             prevWeaponBinding = new EventBinding<OnPrevWeapon>(PrevWeapon);
@@ -101,10 +102,10 @@ public class AttackSystem : MonoBehaviour {
     void SwitchBetweenWeapons() {
         switch (weapon) {
             case AttackType.melee:
+                executeAttackFunction = SwordAttack;
                 _sword?.SetActive(true);
                 _bow?.SetActive(false);
                 _tome?.SetActive(false);
-                executeAttackFunction = SwordAttack;
                 
                 break;
             case AttackType.range:
@@ -144,7 +145,8 @@ public class AttackSystem : MonoBehaviour {
         RaiseExecuteEvent();
     }
 
-    void NextWeapon() {
+    void NextWeapon(OnNextWeapon onNextWeapon) {
+        if (onNextWeapon.entity != gameObject) return;
         weaponIdx = (weaponIdx + 1) % 3;
         weapon = (AttackType)weaponIdx;
         bool isPlayer = TryGetComponent<PlayerController>(out _);
@@ -152,7 +154,8 @@ public class AttackSystem : MonoBehaviour {
         SwitchBetweenWeapons();
     }
 
-    void PrevWeapon() {
+    void PrevWeapon(OnPrevWeapon onPrevWeapon) {
+        if (onPrevWeapon.entity != gameObject) return;
         weaponIdx = (weaponIdx - 1 + 3) % 3;
         weapon = (AttackType)weaponIdx;
         bool isPlayer = TryGetComponent<PlayerController>(out _);
@@ -182,18 +185,30 @@ public class AttackSystem : MonoBehaviour {
     }
 
     void BowAttack() {
-        if (_proyectile == null)
+        if (_proyectile == null) {
+            Debug.LogError("Proyectil es null en BowAttack!");
             return;
+        }
 
         QuitAnimation();
-        GameObject tempProyectile;
-        tempProyectile = Instantiate(_proyectile, transform.position, transform.localRotation);
+
+        Vector3 spawnOffset = transform.forward * 1.5f + Vector3.up * 0.5f;
+        GameObject tempProyectile = Instantiate(_proyectile,
+            transform.position + spawnOffset,
+            transform.rotation);
+
+        Proyectile proyectileScript = tempProyectile.GetComponent<Proyectile>();
+        if (proyectileScript != null) {
+            // Configura la layer según quién dispara
+            bool isPlayer = TryGetComponent<PlayerController>(out _);
+            proyectileScript.SetLayer(isPlayer);
+        }
+
         statHandler.Ammo -= 1;
     }
+        #endregion
 
-    #endregion
-
-    #region Magic
+        #region Magic
 
     void PrepareMagicAttack() {
         tempObject = Instantiate(_fireBallPV, worldPos, Quaternion.identity);
@@ -215,6 +230,8 @@ public class AttackSystem : MonoBehaviour {
 
         if (fireball != null) {
             fireball.LaunchTowards(worldPos, 3, -15f);
+            bool isPlayer = TryGetComponent<PlayerController>(out _);
+            fireball.SetLayer(isPlayer);
         }
     }
 

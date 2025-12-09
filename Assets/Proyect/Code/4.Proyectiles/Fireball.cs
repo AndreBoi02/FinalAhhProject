@@ -6,10 +6,17 @@ public class Fireball : MonoBehaviour {
     private Vector3 targetPosition;
     private bool isLaunched = false;
     [SerializeField] GameObject HitBox;
+    [SerializeField] int substractingVal;
 
     void Awake() {
         rb = GetComponent<Rigidbody>();
         HitBox.SetActive(false);
+    }
+
+    public void SetLayer(bool isPlayerProjectile) {
+        gameObject.layer = isPlayerProjectile ?
+            LayerMask.NameToLayer("PlayerProjectiles") :
+            LayerMask.NameToLayer("EnemyProjectiles");
     }
 
     public void LaunchTowards(Vector3 target, float arcHeight, float gravity) {
@@ -44,8 +51,9 @@ public class Fireball : MonoBehaviour {
             rb.useGravity = false;
             HitBox.SetActive(true);
         }
-        if (other.CompareTag("Player") || other.CompareTag("Enemy")) {
-            print("Burn");
+        if (other.GetComponent<StatHandler>()) {
+            other.GetComponent<StatHandler>().Health -= substractingVal;
+            Debug.Log($"Agent hit: {other.gameObject.name}, damage dealt: {substractingVal}");
         }
     }
 }

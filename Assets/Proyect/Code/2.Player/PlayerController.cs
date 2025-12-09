@@ -49,12 +49,21 @@ namespace FinalProyect {
 
         #region UnityMethods
 
+        EventBinding<DeathEvent> deathEvent;
+
         void Start() {
             initialSpeed = Speed;
+
+            deathEvent = new EventBinding<DeathEvent>(StopAll);
+            EventBus<DeathEvent>.Register(deathEvent);
         }
 
         void Update() {
             statHandler.PlayerAlive();
+        }
+
+        private void OnDisable() {
+            EventBus<DeathEvent>.Deregister(deathEvent);
         }
 
         #endregion
@@ -62,6 +71,7 @@ namespace FinalProyect {
         #region MovementMethods
 
         public void MovePlayer(InputAction.CallbackContext context) {
+            if (isDead) return;
             if (context.performed) {
                 if (context.action.name == "Move") {
                     movementDir = new Vector3(context.ReadValue<Vector2>().x, 0, context.ReadValue<Vector2>().y).normalized;
@@ -82,6 +92,7 @@ namespace FinalProyect {
         }
 
         public void ChangeSpeed(InputAction.CallbackContext context) {
+            if (!isDead) return;
             if (context.control.IsPressed()) {
                 if (context.action.name == "Run") {
                     normalSpeed = runnigSpeed;
@@ -100,6 +111,7 @@ namespace FinalProyect {
         #region DashMethods
 
         public void Dash(InputAction.CallbackContext context) {
+            if (isDead) return;
             if (context.performed && canDash) {
                 canDash = false;
                 rb.linearVelocity = Vector3.zero;
@@ -165,6 +177,7 @@ namespace FinalProyect {
         }
 
         void LookAtMouseDir(Vector3 worldPos) {
+            if (isDead) return;
             Vector3 LookAt = worldPos - transform.position;
             LookAt.y = 0;
             transform.rotation = Quaternion.LookRotation(LookAt);
@@ -181,6 +194,7 @@ namespace FinalProyect {
         bool _isMouseDown = false;
 
         public void OnClickDonw(InputAction.CallbackContext context) {
+            if (isDead) return;
             if (context.performed && AttackSystem.weapon == AttackSystem.AttackType.magic ||
                 AttackSystem.weapon == AttackSystem.AttackType.range) {
                 OnPrepareAttack?.Invoke();
@@ -189,6 +203,7 @@ namespace FinalProyect {
         }
 
         public void OnClickUp(InputAction.CallbackContext context) {
+            if (isDead) return;
             if (context.canceled) {
                 _isMouseDown = false;
                 OnAttack?.Invoke();
@@ -196,14 +211,20 @@ namespace FinalProyect {
         }
 
         public void NextWeapon(InputAction.CallbackContext context) {
+            if (isDead) return;
             if (context.performed) {
-                EventBus<OnNextWeapon>.Raise(new OnNextWeapon());
+                EventBus<OnNextWeapon>.Raise(new OnNextWeapon {
+                    entity = gameObject
+                });
             }
         }
 
         public void PrevWeapon(InputAction.CallbackContext context) {
+            if (isDead) return;
             if (context.performed) {
-                EventBus<OnPrevWeapon>.Raise(new OnPrevWeapon());
+                EventBus<OnPrevWeapon>.Raise(new OnPrevWeapon {
+                    entity = gameObject
+                });
             }
         }
 
@@ -212,6 +233,7 @@ namespace FinalProyect {
         #region PotionsMethods
 
         public void UseHpPot(InputAction.CallbackContext context) {
+            if (isDead) return;
             if (context.performed && statHandler.HpPotAvailable() && statHandler.Health != 100) {
                 statHandler.HpPot -= 1;
                 if(statHandler.Health >= 81) {
@@ -226,6 +248,7 @@ namespace FinalProyect {
         }
 
         public void UseManaPot(InputAction.CallbackContext context) {
+            if (isDead) return;
             if (context.canceled && statHandler.ManaPotAvailable() && statHandler.Mana != 50) {
                 statHandler.ManaPot -= 1;
                 if (statHandler.Mana >= 36) {
@@ -240,5 +263,11 @@ namespace FinalProyect {
         }
 
         #endregion
+
+        [SerializeField] bool isDead = false;
+        void StopAll(DeathEvent deathEvent) {
+            if(deathEvent.Source == gameObject)
+                isDead = deathEvent.isDead;
+        }
     }
 }

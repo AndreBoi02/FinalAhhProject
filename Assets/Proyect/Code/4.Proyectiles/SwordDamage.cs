@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class testDamage : MonoBehaviour {
+public class SwordDamage : MonoBehaviour {
     [SerializeField] int substractingVal;
-    [SerializeField] float addingVal;
 
     private void OnTriggerEnter(Collider other) {
         if (other.GetComponent<StatHandler>()) {
             other.GetComponent<StatHandler>().Health -= substractingVal;
+            Debug.Log($"Agent hit: {other.gameObject.name}, damage dealt: {substractingVal}");
         }
     }
 }

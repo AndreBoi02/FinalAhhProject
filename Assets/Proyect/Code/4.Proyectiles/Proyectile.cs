@@ -3,24 +3,37 @@
 [RequireComponent(typeof(Rigidbody))]
 public class Proyectile : MonoBehaviour {
     Rigidbody rb => GetComponent<Rigidbody>();
-    public int Speed {
-        get => bulletSpeed; set {
-            bulletSpeed = value;
-        }
-    }
+
     [SerializeField] int bulletSpeed;
+    [SerializeField] float lifeTime = 5f;
+    [SerializeField] int substractingVal;
+
+    public void SetLayer(bool isPlayerProjectile) {
+        gameObject.layer = isPlayerProjectile ?
+            LayerMask.NameToLayer("PlayerProjectiles") :
+            LayerMask.NameToLayer("EnemyProjectiles");
+    }
+
+    public int Speed {
+        get => bulletSpeed;
+        set => bulletSpeed = value;
+    }
+
+    void Start() {
+        Destroy(gameObject, lifeTime);
+    }
 
     void Update() {
         rb.linearVelocity = transform.forward * Speed;
     }
 
-    private void OnTriggerEnter(Collider collision) {
-        if (collision.gameObject.GetComponent<IDamageable>() != null) {
-            collision.gameObject.GetComponent<IDamageable>().Damage();
-            Destroy(gameObject);
+    private void OnTriggerEnter(Collider other) {
+
+        if (other.GetComponent<StatHandler>()) {
+            other.GetComponent<StatHandler>().Health -= substractingVal;
+            Debug.Log($"Agent hit: {other.gameObject.name}, damage dealt: {substractingVal}");
         }
-        else if (collision.gameObject.CompareTag("Wall") ||
-                collision.gameObject.CompareTag("Player")) {
+        if (other.gameObject.CompareTag("Wall")) {
             Destroy(gameObject);
         }
     }

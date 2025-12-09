@@ -16,10 +16,10 @@ TagManager:
   - UI
   - Layout
   - Floor
-  - 
-  - 
-  - 
-  - 
+  - PlayerProjectiles
+  - EnemyProjectiles
+  - Player
+  - Enemies
   - 
   - 
   - 

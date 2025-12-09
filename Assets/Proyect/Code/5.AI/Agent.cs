@@ -52,6 +52,7 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     [SerializeField] SO_EnemyVariables m_EnemyVars;
     SteeringVars m_steeringVars;
 
+    StatHandler m_statHandler;
     #endregion
 
     #region Runtime Var
@@ -63,20 +64,34 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     #endregion
 
     protected ISteeringBehaviour m_currentBehaviour;
+    EventBinding<DeathEvent> deathEvent;
 
     protected virtual void Start() {
+        deathEvent = new EventBinding<DeathEvent>(StopAll);
+        EventBus<DeathEvent>.Register(deathEvent);
+
+        m_statHandler = GetComponent<StatHandler>();
+
         m_targetPos = m_aTarget != null ? m_aTarget.transform.position : Vector3.zero;
 
         if(m_EnemyVars != null)
             m_steeringVars = m_EnemyVars.SteeringVars;
     }
 
+    void Update() {
+        m_statHandler.PlayerAlive();
+    }
+
+    private void OnDisable() {
+        EventBus<DeathEvent>.Deregister(deathEvent);
+    }
+
     protected virtual void FixedUpdate() {
-        Move();
+        ExecuteBehaviour();
         m_targetPos = m_aTarget != null ? m_aTarget.transform.position : Vector3.zero;
     }
      
-    protected virtual void Move() { }
+    protected virtual void ExecuteBehaviour() { }
 
     private void OnDrawGizmos() {
         Gizmos.color = Color.cyan;
@@ -153,6 +168,12 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     protected float DistanceFromPlayer() {
         return Vector3.Distance(m_pos, m_targetPos);
     }
+    [SerializeField] protected float safetyDistance;
+    public bool IsPlayerInSideRadius() {
+        if (DistanceFromPlayer() < safetyDistance)
+            return true;
+        return false;
+    }
 
     [SerializeField] protected float attackCoolDown;
     protected float attackCounter;
@@ -177,5 +198,19 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
 
     protected virtual void InvokeOnAttack() {
         OnAttack?.Invoke();
+    }
+
+    public StatHandler GetStatHandler() {
+        return m_statHandler;
+    }
+
+    bool isDead = false;
+    void StopAll(DeathEvent deathEvent) {
+        if (deathEvent.Source == gameObject)
+            isDead = deathEvent.isDead;
+    }
+
+    public bool GetIsDead() {
+        return isDead;
     }
 }

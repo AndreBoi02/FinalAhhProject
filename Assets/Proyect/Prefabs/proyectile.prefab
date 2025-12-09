@@ -96,6 +96,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpeed: 10
+  lifeTime: 5
+  substractingVal: 10
 --- !u!1001 &3268832130252661558
 PrefabInstance:
   m_ObjectHideFlags: 0

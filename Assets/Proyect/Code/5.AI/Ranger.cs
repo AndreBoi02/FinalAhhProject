@@ -6,7 +6,7 @@ public class Ranger : Agent {
         SetBehavior(new EvadeBehaviour());
     }
 
-    protected override void Move() {
+    protected override void ExecuteBehaviour() {
         if (DistanceFromPlayer() >= 7f) {
             if (!OnAttackCoolDown()) {
                 FacePlayer();

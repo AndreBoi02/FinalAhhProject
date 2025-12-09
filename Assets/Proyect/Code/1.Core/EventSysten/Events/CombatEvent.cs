@@ -23,6 +23,10 @@ public class CombatEvent : IEvent {
         public bool isPlayer;
     }
 
-    public struct OnNextWeapon : IEvent { }
-    public struct OnPrevWeapon : IEvent { }
+    public struct OnNextWeapon : IEvent {
+        public GameObject entity;
+    }
+    public struct OnPrevWeapon : IEvent {
+        public GameObject entity;
+    }
 }

@@ -13,7 +13,7 @@ public struct StatsVars {
 
 public class StatHandler : MonoBehaviour {
     [SerializeField] Stats_SO characterStatsSO;
-    StatsVars statsVars;
+    [SerializeField] StatsVars statsVars;
 
     void RaiseStatsEvent() {
         EventBus<StatsEvent>.Raise(new StatsEvent {

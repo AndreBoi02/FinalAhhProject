@@ -5,7 +5,7 @@ public class Tank : Agent {
         SetBehavior(new PursuitBehaviour());
     }
 
-    protected override void Move() {
+    protected override void ExecuteBehaviour() {
         FacePlayer();
         if (DistanceFromPlayer() <= 1.5f) {
             if (!OnAttackCoolDown()) {
