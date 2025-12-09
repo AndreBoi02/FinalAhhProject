@@ -2,6 +2,19 @@ using System.Collections;
 using UnityEngine;
 
 public class Mage : Agent {
+
+    #region Enums
+
+    public enum typeOfBehaviours {
+        Seek,
+        Flee,
+        none
+    }
+
+    #endregion
+
+    public typeOfBehaviours type = typeOfBehaviours.none;
+
     protected override void Start() {
         SetBehavior(new WanderBehaviour());
     }
@@ -18,7 +31,7 @@ public class Mage : Agent {
 
     IEnumerator InvokeMagic() {
         PrepareOnAttack();
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(.65f);
         InvokeOnAttack();
     }
 }

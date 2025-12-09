@@ -67,6 +67,7 @@ namespace FinalProyect {
                     movementDir = new Vector3(context.ReadValue<Vector2>().x, 0, context.ReadValue<Vector2>().y).normalized;
                     rb.linearVelocity = movementDir * normalSpeed;
                     EventBus<RunEvent>.Raise(new RunEvent {
+                        Source = gameObject,
                         isRunnig = true
                     });
                 }
@@ -74,6 +75,7 @@ namespace FinalProyect {
             else {
                 rb.linearVelocity = Vector3.zero;
                 EventBus<RunEvent>.Raise(new RunEvent {
+                    Source = gameObject,
                     isRunnig = false
                 });
             }

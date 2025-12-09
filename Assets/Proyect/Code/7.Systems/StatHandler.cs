@@ -1,59 +1,72 @@
 using UnityEngine;
 
-public class StatHandler : MonoBehaviour {
-    [SerializeField] float health;
-    [SerializeField] float mana;
-    [SerializeField] float ammo;
-    [SerializeField] float hpPotion;
-    [SerializeField] float manaPotion;
+#region Struct
+[System.Serializable]
+public struct StatsVars {
+    [SerializeField] public float health;
+    [SerializeField] public float mana;
+    [SerializeField] public float ammo;
+    [SerializeField] public float hpPotion;
+    [SerializeField] public float manaPotion;
+}
+#endregion
 
-    private void RaiseStatsEvent() {
+public class StatHandler : MonoBehaviour {
+    [SerializeField] Stats_SO characterStatsSO;
+    StatsVars statsVars;
+
+    void RaiseStatsEvent() {
         EventBus<StatsEvent>.Raise(new StatsEvent {
-            health = health,
-            mana = mana,
-            ammo = ammo,
-            hpPot = hpPotion,
-            manaPot = manaPotion
+            health = statsVars.health,
+            mana = statsVars.mana,
+            ammo = statsVars.ammo,
+            hpPot = statsVars.hpPotion,
+            manaPot = statsVars.manaPotion
         });
     }
 
     public float Health {
-        get => health;
+        get => statsVars.health;
         set {
-            health = value;
-            RaiseStatsEvent();
+            statsVars.health = value;
+            if(gameObject.CompareTag("Player"))
+                RaiseStatsEvent();
         }
     }
 
     public float Mana {
-        get => mana;
+        get => statsVars.mana;
         set {
-            mana = value;
-            RaiseStatsEvent();
+            statsVars.mana = value;
+            if (gameObject.CompareTag("Player"))
+                RaiseStatsEvent();
         }
     }
 
     public float HpPot {
-        get => hpPotion;
+        get => statsVars.hpPotion;
         set {
-            hpPotion = value;
-            RaiseStatsEvent();
+            statsVars.hpPotion = value;
+            if (gameObject.CompareTag("Player"))
+                RaiseStatsEvent();
         }
     }
 
     public float ManaPot {
-        get => manaPotion;
+        get => statsVars.manaPotion;
         set {
-            manaPotion = value;
-            RaiseStatsEvent();
+            statsVars.manaPotion = value;
+            if (gameObject.CompareTag("Player"))
+                RaiseStatsEvent();
         }
     }
 
     public float Ammo {
-        get => ammo;
+        get => statsVars.ammo;
         set {
-            ammo = value;
-            RaiseStatsEvent();
+            statsVars.ammo = value;
+            if (gameObject.CompareTag("Player"))
+                RaiseStatsEvent();
         }
     }
 
@@ -74,6 +87,7 @@ public class StatHandler : MonoBehaviour {
     public void PlayerAlive() {
         if (Health > 0) return;
         EventBus<DeathEvent>.Raise(new DeathEvent {
+            Source = gameObject,
             isDead = true
         });
     }
@@ -93,6 +107,8 @@ public class StatHandler : MonoBehaviour {
     }
 
     private void Start() {
+        if (characterStatsSO != null)
+            statsVars = characterStatsSO.statsVars;
         RaiseStatsEvent();
     }
 }

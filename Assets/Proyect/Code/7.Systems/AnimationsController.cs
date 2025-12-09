@@ -33,22 +33,27 @@ public class AnimationsController : MonoBehaviour {
     }
 
     void PlayDeath(DeathEvent animationEvent) {
+        if (animationEvent.Source != gameObject) return;
         animator.SetBool("isDead", animationEvent.isDead);
     }
 
     void PlayRunning(RunEvent animationEvent) {
+        if (animationEvent.Source != gameObject) return;
         animator.SetBool("isRunning", animationEvent.isRunnig);
     }
     
     void PlayAttack1(AnimationEvent animationEvent) {
+        if (animationEvent.Source != gameObject) return;
         animator.SetBool("isAttacking1", animationEvent.OnAttacking1);
     }
     
     void PlayAttack2(AnimationEvent animationEvent) {
+        if (animationEvent.Source != gameObject) return;
         animator.SetBool("isAttacking2", animationEvent.OnAttacking2);
     }
     
     void PlayAttack3(AnimationEvent animationEvent) {
+        if (animationEvent.Source != gameObject) return;
         animator.SetBool("isAttacking3", animationEvent.OnAttacking3);
     }
 

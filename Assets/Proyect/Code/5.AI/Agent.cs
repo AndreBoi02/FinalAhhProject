@@ -43,21 +43,14 @@ public struct SteeringVars{
 
 [RequireComponent(typeof(Rigidbody), typeof(AttackSystem))]
 public abstract class Agent : MonoBehaviour, IAttackSystem {
-    #region Enums
-
-    protected enum typeOfBehaviours {
-        Seek,
-        Flee,
-        none
-    }
-
-    #endregion
 
     #region References
     protected AttackSystem m_attackSystem => GetComponent<AttackSystem>();
     protected Rigidbody m_rb => GetComponent<Rigidbody>();
     [SerializeField] protected Agent m_aTarget;
-    [SerializeField] SteeringVars m_steeringVars;
+
+    [SerializeField] SO_EnemyVariables m_EnemyVars;
+    SteeringVars m_steeringVars;
 
     #endregion
 
@@ -66,7 +59,6 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     protected Vector3 m_pos => transform.position;
     protected Vector3 m_targetPos;
     protected Vector3 m_currentVel;
-    protected typeOfBehaviours type = typeOfBehaviours.Seek;
 
     #endregion
 
@@ -74,6 +66,9 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
 
     protected virtual void Start() {
         m_targetPos = m_aTarget != null ? m_aTarget.transform.position : Vector3.zero;
+
+        if(m_EnemyVars != null)
+            m_steeringVars = m_EnemyVars.SteeringVars;
     }
 
     protected virtual void FixedUpdate() {

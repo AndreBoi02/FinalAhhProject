@@ -101,26 +101,26 @@ public class AttackSystem : MonoBehaviour {
     void SwitchBetweenWeapons() {
         switch (weapon) {
             case AttackType.melee:
-                _sword.SetActive(true);
-                _bow.SetActive(false);
-                _tome.SetActive(false);
+                _sword?.SetActive(true);
+                _bow?.SetActive(false);
+                _tome?.SetActive(false);
                 executeAttackFunction = SwordAttack;
                 
                 break;
             case AttackType.range:
                 prepareAttackFunction = ChargeBow;
                 executeAttackFunction = BowAttack;
-                _sword.SetActive(false);
-                _bow.SetActive(true);
-                _tome.SetActive(false);
+                _sword?.SetActive(false);
+                _bow?.SetActive(true);
+                _tome?.SetActive(false);
                 
                 break;
             case AttackType.magic:
                 prepareAttackFunction = PrepareMagicAttack;
                 executeAttackFunction = ExecuteMagicAttack;
-                _sword.SetActive(false);
-                _bow.SetActive(false);
-                _tome.SetActive(true);
+                _sword?.SetActive(false);
+                _bow?.SetActive(false);
+                _tome?.SetActive(true);
                 break;
             default:
                 break;  
@@ -222,6 +222,7 @@ public class AttackSystem : MonoBehaviour {
 
     void CallAnimation() {
         EventBus<AnimationEvent>.Raise(new AnimationEvent {
+            Source = gameObject,
             OnAttacking1 = weapon == AttackType.magic ? true : false,
             OnAttacking2 = weapon == AttackType.melee ? true : false,
             OnAttacking3 = weapon == AttackType.range ? true : false,
@@ -230,6 +231,7 @@ public class AttackSystem : MonoBehaviour {
 
     void QuitAnimation() {
         EventBus<AnimationEvent>.Raise(new AnimationEvent {
+            Source = gameObject,
             OnAttacking1 = false,
             OnAttacking2 = false,
             OnAttacking3 = false,
