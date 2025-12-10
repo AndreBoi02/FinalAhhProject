@@ -7,6 +7,7 @@ public class Fireball : MonoBehaviour {
     private bool isLaunched = false;
     [SerializeField] GameObject HitBox;
     [SerializeField] int substractingVal;
+    [SerializeField] float lifeTime = 5f;
 
     void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -45,6 +46,7 @@ public class Fireball : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Floor")) {
+            Destroy(gameObject, lifeTime);
             GetComponent<MeshRenderer>().enabled = false;
             isLaunched = false;
             rb.linearVelocity = Vector3.zero;
@@ -52,6 +54,7 @@ public class Fireball : MonoBehaviour {
             HitBox.SetActive(true);
         }
         if (other.GetComponent<StatHandler>()) {
+            Destroy(gameObject, lifeTime);
             other.GetComponent<StatHandler>().Health -= substractingVal;
             Debug.Log($"Agent hit: {other.gameObject.name}, damage dealt: {substractingVal}");
         }
