@@ -61,6 +61,7 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     protected Vector3 m_targetPos;
     protected Vector3 m_currentVel;
 
+    [SerializeField] Agent sheltered;
     #endregion
 
     protected ISteeringBehaviour m_currentBehaviour;
@@ -168,6 +169,7 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     protected float DistanceFromPlayer() {
         return Vector3.Distance(m_pos, m_targetPos);
     }
+
     [SerializeField] protected float safetyDistance;
     public bool IsPlayerInSideRadius() {
         if (DistanceFromPlayer() < safetyDistance)
@@ -212,5 +214,9 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
 
     public bool GetIsDead() {
         return isDead;
+    }
+
+    public Agent GetSheltered() {
+        return sheltered;
     }
 }

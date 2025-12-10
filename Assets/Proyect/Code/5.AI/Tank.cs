@@ -1,21 +1,84 @@
 using UnityEngine;
 
 public class Tank : Agent {
+    ITankLevels tankLevel;
+    EventBinding<RunEvent> runEventBinding;
+
+    public Tank(ITankLevels tankLevel) {
+        this.tankLevel = tankLevel; 
+    }
+
     protected override void Start() {
-        SetBehavior(new PursuitBehaviour());
+        base.Start();
+        tankLevel = new HardTank();;
+    }
+
+    private void OnDisable() {
+        EventBus<RunEvent>.Deregister(runEventBinding);
     }
 
     protected override void ExecuteBehaviour() {
+        tankLevel?.Execute(this);
+    }
+
+    public void StayInPlace() {
+        m_rb.linearVelocity = Vector3.zero;
+        EventBus<RunEvent>.Raise(new RunEvent {
+            Source = gameObject,
+            isRunnig = false
+        });
+    }
+
+    public void GoForThePlayerSeek() {
+        SetBehavior(new SeekBehaviour());
         FacePlayer();
-        if (DistanceFromPlayer() <= 1.5f) {
-            if (!OnAttackCoolDown()) {
-                base.InvokeOnAttack();
-            }
-            m_rb.linearVelocity = Vector3.zero;
-        }
-        else {
+        m_currentBehaviour?.Execute(this);
+        m_rb.linearVelocity = m_currentVel;
+        EventBus<RunEvent>.Raise(new RunEvent{
+            Source = gameObject,
+            isRunnig = true
+        });
+    }
+
+    public void PredictPlayer() {
+        if (DistanceFromPlayer() > 5) {
+            FacePlayer();
+            SetBehavior(new PursuitBehaviour());
             m_currentBehaviour?.Execute(this);
             m_rb.linearVelocity = m_currentVel;
+            EventBus<RunEvent>.Raise(new RunEvent {
+                Source = gameObject,
+                isRunnig = true
+            });
+        }
+        else {
+            GoForThePlayerSeek();
+        }
+    }
+
+    public void ProtectAgent() {
+        SetBehavior(new GuardianBehaviour());
+        FacePlayer();
+        m_currentBehaviour?.Execute(this);
+        m_rb.linearVelocity = m_currentVel;
+        if(m_aTarget.GetRigidbody().linearVelocity != Vector3.zero) {
+            EventBus<RunEvent>.Raise(new RunEvent {
+                Source = gameObject,
+                isRunnig = true
+            });
+        }
+        else {
+            EventBus<RunEvent>.Raise(new RunEvent {
+                Source = gameObject,
+                isRunnig = false
+            });
+        }
+    }
+
+    public void Attack() {
+        
+        if (!OnAttackCoolDown()) {
+            InvokeOnAttack();
         }
     }
 }

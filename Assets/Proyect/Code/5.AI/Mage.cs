@@ -2,30 +2,23 @@ using System.Collections;
 using UnityEngine;
 
 public class Mage : Agent {
-    #region Enums
-    public enum typeOfBehaviours {
-        Seek,
-        Flee,
-        none
-    }
-    public typeOfBehaviours type = typeOfBehaviours.none;
-    #endregion
+    IMageLevels mageLevel;
 
-    IMageLevels difficultyStrategy;
     [SerializeField] Transform[] tpPoints;
     [SerializeField] StatHandler[] alliesStats;
+
     public Mage(IMageLevels mageLevel) {
-        mageLevel = difficultyStrategy;
+        this.mageLevel = mageLevel;
     }
 
     protected override void Start() {
         base.Start();
-        SetBehavior(new SeekBehaviour());
-        difficultyStrategy = new HardMage();
+        //SetBehavior(new SeekBehaviour());
+        mageLevel = new HardMage();
     }
 
     protected override void ExecuteBehaviour() {
-        difficultyStrategy?.Execute(this);
+        mageLevel?.Execute(this);
     }
 
     public void Attack() {
