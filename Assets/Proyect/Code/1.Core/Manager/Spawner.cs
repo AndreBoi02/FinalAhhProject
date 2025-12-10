@@ -12,11 +12,12 @@ public class Spawner : MonoBehaviour {
 
     [Header("Player Reference")]
     [SerializeField] Agent player;
+    [SerializeField] Transform[] spawnPoints;
 
     [Header("Enemies Prefabs")]
-    [SerializeField] GameObject[] m_gOMages;
-    [SerializeField] GameObject[] m_gOMelees;
-    [SerializeField] GameObject[] m_gORangers;
+    [SerializeField] GameObject m_gOMage;
+    [SerializeField] GameObject m_gOMelee;
+    [SerializeField] GameObject m_gORanger;
 
     [Header("Enemies stats")]
     [SerializeField] SO_EnemyVariables[] m_sOEnemyVariables;
@@ -24,7 +25,8 @@ public class Spawner : MonoBehaviour {
     int randomIdx;
 
     private void Start() {
-
+        GameObject tempEnemy = Instantiate(m_gOMage, spawnPoints[0]);
+        new Mage(new EasyMage());
     }
 
     void RandomNumber() {
