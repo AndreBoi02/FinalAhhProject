@@ -1,4 +1,6 @@
 
+using UnityEngine;
+
 public struct StatsEvent : IEvent{
     public float health;
     public float mana;

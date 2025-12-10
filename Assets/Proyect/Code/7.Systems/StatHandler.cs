@@ -16,6 +16,7 @@ public class StatHandler : MonoBehaviour {
     [SerializeField] StatsVars statsVars;
 
     void RaiseStatsEvent() {
+        if(!gameObject.CompareTag("Player")) return;
         EventBus<StatsEvent>.Raise(new StatsEvent {
             health = statsVars.health,
             mana = statsVars.mana,
@@ -29,7 +30,7 @@ public class StatHandler : MonoBehaviour {
         get => statsVars.health;
         set {
             statsVars.health = value;
-            if(gameObject.CompareTag("Player"))
+            if (gameObject.CompareTag("Player"))
                 RaiseStatsEvent();
         }
     }
@@ -92,6 +93,11 @@ public class StatHandler : MonoBehaviour {
         });
     }
 
+    public bool IsPlayerAlive() {
+        if (Health > 0)
+            return true;
+        return false;
+    }
     public bool HpPotAvailable() {
         if (HpPot > 0) {
             return true;
@@ -110,5 +116,32 @@ public class StatHandler : MonoBehaviour {
         if (characterStatsSO != null)
             statsVars = characterStatsSO.statsVars;
         RaiseStatsEvent();
+    }
+
+    public void InflictDamage(int damage, GameObject damageSource) {
+        Health -= damage;
+
+        if (Health <= 0) {
+            Die(damageSource);
+        }
+    }
+
+    private void Die(GameObject killer) {
+        // Determinar si es jugador o enemigo
+        bool isPlayer = gameObject.CompareTag("Player");
+
+        if (isPlayer) {
+            // Evento de muerte del jugador
+            PlayerDeathEvent deathEvent = new PlayerDeathEvent(killer, gameObject);
+            EventBus<PlayerDeathEvent>.Raise(deathEvent);
+        }
+        else {
+            // Evento de muerte de enemigo
+            EnemyDeathEvent deathEvent = new EnemyDeathEvent(killer, gameObject);
+            EventBus<EnemyDeathEvent>.Raise(deathEvent);
+        }
+
+        // Lógica común de muerte
+        Debug.Log($"{gameObject.name} died by {killer?.name}");
     }
 }

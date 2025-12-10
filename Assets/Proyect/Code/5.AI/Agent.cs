@@ -213,12 +213,18 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
 
     bool isDead = false;
     void StopAll(DeathEvent deathEvent) {
-        if (deathEvent.Source == gameObject)
+        if (deathEvent.Source == gameObject) {
             isDead = deathEvent.isDead;
+            EreaseEnemy();
+        }
     }
 
     public bool GetIsDead() {
         return isDead;
+    }
+
+    void EreaseEnemy() {
+        Destroy(gameObject, 5);
     }
 
     public Agent GetSheltered() {

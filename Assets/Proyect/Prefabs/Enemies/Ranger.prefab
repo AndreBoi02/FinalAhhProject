@@ -1038,7 +1038,7 @@ MonoBehaviour:
   rotationSpeed: 5
   safetyDistance: 3
   attackCoolDown: 4
-  level: 2
+  level: 0
   projectileSpeed: 15
 --- !u!114 &9010797828755740442
 MonoBehaviour:
@@ -1056,7 +1056,7 @@ MonoBehaviour:
   _sword: {fileID: 3256584579523887552}
   _bow: {fileID: 1451963029539168025}
   _tome: {fileID: 4132786031031507797}
-  _proyectile: {fileID: 2348712055330108638, guid: c69cf83bb71e8b845af719c1c870dae4, type: 3}
+  _proyectile: {fileID: 2348712055330108638, guid: 1eb45d176019cd5488f2b10f1f802a03, type: 3}
   _fireBall: {fileID: 0}
   _fireBallPV: {fileID: 0}
 --- !u!114 &5120801771591249021

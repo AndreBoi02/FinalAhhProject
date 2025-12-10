@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 2666853825385200250}
   - component: {fileID: 5439517064589779212}
   m_Layer: 0
-  m_Name: proyectile
-  m_TagString: Player
+  m_Name: proyectile 1
+  m_TagString: Ranger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

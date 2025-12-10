@@ -219,6 +219,14 @@ public class AttackSystem : MonoBehaviour {
             }
         }
 
+        if (gameObject.CompareTag("Player"))
+            EventBus<PlayerAccuracyEvent>.Raise(new PlayerAccuracyEvent {
+                Shooter = gameObject,
+                ProyectilesTrown = 1, 
+                ProyectilesMissed = 0, 
+                ProyectilesHit = 0
+            });
+
         GameObject tempProyectile = Instantiate(_proyectile, spawnPosition, Quaternion.identity);
 
         Proyectile proyectileScript = tempProyectile.GetComponent<Proyectile>();
@@ -228,6 +236,8 @@ public class AttackSystem : MonoBehaviour {
 
             bool isPlayer = TryGetComponent<PlayerController>(out _);
             proyectileScript.SetLayer(isPlayer);
+            if (gameObject.CompareTag("Player"))
+                proyectileScript.SetShooter(gameObject);
         }
 
         statHandler.Ammo -= 1;
@@ -251,6 +261,14 @@ public class AttackSystem : MonoBehaviour {
     }
 
     void CreateFireBall() {
+        if (gameObject.CompareTag("Player"))
+            EventBus<PlayerAccuracyEvent>.Raise(new PlayerAccuracyEvent {
+                Shooter = gameObject,
+                ProyectilesTrown = 1,
+                ProyectilesMissed = 0,
+                ProyectilesHit = 0
+            });
+
         GameObject _tempfb = Instantiate(_fireBall, transform.position, Quaternion.identity);
         Fireball fireball = _tempfb.GetComponent<Fireball>();
 
@@ -258,6 +276,8 @@ public class AttackSystem : MonoBehaviour {
             fireball.LaunchTowards(worldPos, 3, -15f);
             bool isPlayer = TryGetComponent<PlayerController>(out _);
             fireball.SetLayer(isPlayer);
+            if (gameObject.CompareTag("Player"))
+                fireball.SetShooter(gameObject);
         }
     }
 

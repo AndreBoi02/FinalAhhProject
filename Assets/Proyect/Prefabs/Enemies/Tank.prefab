@@ -890,7 +890,7 @@ GameObject:
   - component: {fileID: 8399097388691144103}
   m_Layer: 0
   m_Name: Espada
-  m_TagString: Untagged
+  m_TagString: Tank
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1101,6 +1101,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1389544875746164284}
+  - component: {fileID: 5302527440469960538}
   - component: {fileID: 1135361965435867117}
   - component: {fileID: 7487237991128375319}
   - component: {fileID: 3002507815512447500}
@@ -1132,6 +1133,29 @@ Transform:
   - {fileID: 2602559568279502293}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!136 &5302527440469960538
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6612201717273358163}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1135361965435867117
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1196,6 +1220,7 @@ MonoBehaviour:
   rotationSpeed: 5
   safetyDistance: 1.5
   attackCoolDown: 2
+  level: 0
 --- !u!114 &7323314073577071458
 MonoBehaviour:
   m_ObjectHideFlags: 0

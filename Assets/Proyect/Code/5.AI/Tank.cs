@@ -3,13 +3,33 @@ using UnityEngine;
 public class Tank : Agent {
     ITankLevels tankLevel;
 
-    public Tank(ITankLevels tankLevel) {
-        this.tankLevel = tankLevel; 
+    public enum Level {
+        Easy,
+        Medium,
+        Hard
     }
+
+    public Level level;
 
     protected override void Start() {
         base.Start();
-        tankLevel = new HardTank();;
+        SwitchDificulty();
+    }
+
+    void SwitchDificulty() {
+        switch (level) {
+            case Level.Easy:
+                tankLevel = new EasyTank();
+                break;
+            case Level.Medium:
+                tankLevel = new MediumTank();
+                break;
+            case Level.Hard:
+                tankLevel = new HardTank();
+                break;
+            default:
+                break;
+        }
     }
 
     protected override void ExecuteBehaviour() {

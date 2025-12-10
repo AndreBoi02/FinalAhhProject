@@ -1,20 +1,40 @@
 using System.Collections;
 using UnityEngine;
+using static Ranger;
 
 public class Mage : Agent {
     IMageLevels mageLevel;
 
+    public enum Level {
+        Easy,
+        Medium,
+        Hard
+    }
+
+    public Level level;
+
     [SerializeField] Transform[] tpPoints;
     [SerializeField] StatHandler[] alliesStats;
 
-    public Mage(IMageLevels mageLevel) {
-        this.mageLevel = mageLevel;
-    }
-
     protected override void Start() {
         base.Start();
-        //SetBehavior(new SeekBehaviour());
-        mageLevel = new MediumMage();
+        SwitchDificulty();
+    }
+
+    void SwitchDificulty() {
+        switch (level) {
+            case Level.Easy:
+                mageLevel = new EasyMage();
+                break;
+            case Level.Medium:
+                mageLevel = new MediumMage();
+                break;
+            case Level.Hard:
+                mageLevel = new HardMage();
+                break;
+            default:
+                break;
+        }
     }
 
     protected override void ExecuteBehaviour() {

@@ -16,5 +16,5 @@ MonoBehaviour:
     health: 100
     mana: 50
     ammo: 15
-    hpPotion: 1
-    manaPotion: 1
+    hpPotion: 2
+    manaPotion: 2

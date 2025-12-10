@@ -4,9 +4,8 @@ public class SwordDamage : MonoBehaviour {
     [SerializeField] int substractingVal;
 
     private void OnTriggerEnter(Collider other) {
-        if (other.GetComponent<StatHandler>()) {
-            other.GetComponent<StatHandler>().Health -= substractingVal;
-            Debug.Log($"Agent hit: {other.gameObject.name}, damage dealt: {substractingVal}");
+        if (other.TryGetComponent<StatHandler>(out StatHandler targetStats)) {
+            targetStats.InflictDamage(substractingVal, gameObject);
         }
     }
 }

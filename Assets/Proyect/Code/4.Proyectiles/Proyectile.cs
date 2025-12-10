@@ -7,6 +7,7 @@ public class Proyectile : MonoBehaviour {
     [SerializeField] int bulletSpeed;
     [SerializeField] float lifeTime = 5f;
     [SerializeField] int substractingVal;
+    [SerializeField] GameObject shooter;
 
     // MÉTODO NUEVO: Para configurar dirección de disparo
     public void SetShootingDirection(Vector3 direction) {
@@ -17,6 +18,10 @@ public class Proyectile : MonoBehaviour {
         gameObject.layer = isPlayerProjectile ?
             LayerMask.NameToLayer("PlayerProjectiles") :
             LayerMask.NameToLayer("EnemyProjectiles");
+    }
+
+    public void SetShooter(GameObject shooter) {
+        this.shooter = shooter;
     }
 
     public int Speed {
@@ -33,13 +38,19 @@ public class Proyectile : MonoBehaviour {
     }
 
     private void OnTriggerEnter(Collider other) {
-
-        if (other.GetComponent<StatHandler>()) {
-            other.GetComponent<StatHandler>().Health -= substractingVal;
-            Debug.Log($"Agent hit: {other.gameObject.name}, damage dealt: {substractingVal}");
+        if (other.TryGetComponent<StatHandler>(out StatHandler targetStats)) {
+            if (shooter != null && shooter.CompareTag("Player")) {
+                PlayerAccuracyEvent hitEvent = new PlayerAccuracyEvent(shooter,0, 0, 1);
+                EventBus<PlayerAccuracyEvent>.Raise(hitEvent);
+            }
+            targetStats.InflictDamage(substractingVal, gameObject);
             Destroy(gameObject);
         }
-        if (other.gameObject.CompareTag("Wall")) {
+        else if (other.gameObject.CompareTag("Wall")) {
+            if (shooter != null && shooter.CompareTag("Player")) {
+                PlayerAccuracyEvent missEvent = new PlayerAccuracyEvent(shooter, 0, 1, 0);
+                EventBus<PlayerAccuracyEvent>.Raise(missEvent);
+            }
             Destroy(gameObject);
         }
     }

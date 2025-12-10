@@ -16,11 +16,6 @@ public class Ranger : Agent {
 
     public float ProjectileSpeed => projectileSpeed;
 
-
-    public Ranger(IRangerLevels rangerLevel) {
-        this.rangerLevel = rangerLevel;
-    }
-
     protected override void Start() {
         base.Start();
         SwitchDificulty();

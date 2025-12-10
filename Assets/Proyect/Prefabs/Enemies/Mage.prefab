@@ -686,6 +686,7 @@ MonoBehaviour:
   rotationSpeed: 5
   safetyDistance: 2
   attackCoolDown: 5
+  level: 0
   tpPoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -712,7 +713,7 @@ MonoBehaviour:
   _bow: {fileID: 7525812063717396645}
   _tome: {fileID: 7728193327368623951}
   _proyectile: {fileID: 0}
-  _fireBall: {fileID: 8454173372295801628, guid: 1bf532d0b2e050441a8e25bab30a0f6c, type: 3}
+  _fireBall: {fileID: 8454173372295801628, guid: 93c8f383321b7304094e857f038c9689, type: 3}
   _fireBallPV: {fileID: 8454173372295801628, guid: 9834222600fdcf74ba0bde264d056b56, type: 3}
 --- !u!114 &8632752672458877572
 MonoBehaviour:

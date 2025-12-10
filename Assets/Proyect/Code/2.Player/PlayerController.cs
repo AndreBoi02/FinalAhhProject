@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static CombatEvent;
+using static UnityEngine.InputSystem.PlayerInput;
 
 namespace FinalProyect {
     [RequireComponent(typeof(Rigidbody))]
@@ -236,14 +237,32 @@ namespace FinalProyect {
             if (isDead) return;
             if (context.performed && statHandler.HpPotAvailable() && statHandler.Health != 100) {
                 statHandler.HpPot -= 1;
-                if(statHandler.Health >= 81) {
-                    int wastedPot = ((int)statHandler.Health + 20) - 100;
+                int wastedPoints = 0;
+                int consumedPoints = 20; // Valor de la poción
+
+                if (statHandler.Health >= 81) {
+                    // Calcular desperdicio
+                    wastedPoints = ((int)statHandler.Health + 20) - 100;
                     statHandler.Health = 100;
-                    print(wastedPot);
+
+                    // Puntos consumidos realmente
+                    consumedPoints = 20 - wastedPoints;
+                    Debug.Log($"Poción desperdiciada: {wastedPoints} puntos");
                 }
                 else {
                     statHandler.Health += 20;
                 }
+
+                // DISPARAR EVENTO con TUS estructura
+                PotionEfficiencyEvent potionEvent = new PotionEfficiencyEvent(
+                    gameObject,
+                    consumedPoints,
+                    wastedPoints,
+                    "HP"  // Especificar tipo
+                );
+
+                EventBus<PotionEfficiencyEvent>.Raise(potionEvent);
+                Debug.Log($"Poción usada. Consumido: {consumedPoints}, Desperdiciado: {wastedPoints}");
             }
         }
 
@@ -251,14 +270,32 @@ namespace FinalProyect {
             if (isDead) return;
             if (context.canceled && statHandler.ManaPotAvailable() && statHandler.Mana != 50) {
                 statHandler.ManaPot -= 1;
+
+                int wastedPoints = 0;
+                int consumedPoints = 15; // Valor de la poción
+
                 if (statHandler.Mana >= 36) {
-                    int wastedManaPot = ((int)statHandler.Mana + 15) - 50;
+                    wastedPoints = ((int)statHandler.Mana + 15) - 50;
                     statHandler.Mana = 50;
-                    print(wastedManaPot);
+
+                    // Puntos consumidos realmente
+                    consumedPoints = 15 - wastedPoints;
+                    Debug.Log($"Mana poción desperdiciada: {wastedPoints} puntos");
                 }
                 else {
                     statHandler.Mana += 15;
                 }
+
+                // DISPARAR EVENTO
+                PotionEfficiencyEvent potionEvent = new PotionEfficiencyEvent(
+                    gameObject,
+                    consumedPoints,
+                    wastedPoints,
+                    "Mana"  // Especificar tipo
+                );
+
+                EventBus<PotionEfficiencyEvent>.Raise(potionEvent); ;
+                Debug.Log($"Mana poción usada. Consumido: {consumedPoints}, Desperdiciado: {wastedPoints}");
             }
         }
 

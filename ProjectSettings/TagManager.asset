@@ -7,6 +7,9 @@ TagManager:
   - Wall
   - Floor
   - Enemy
+  - Mage
+  - Ranger
+  - Tank
   layers:
   - Default
   - TransparentFX

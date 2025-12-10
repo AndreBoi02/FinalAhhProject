@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class HardRanger : IRangerLevels {
     public void Execute(Ranger ranger) {
+        if (ranger.GetIsDead()) return;
         if (ranger.DistanceFromPlayer() > 10) {
             Debug.Log("Predicted Attack");
             ranger.StayInPlace();
