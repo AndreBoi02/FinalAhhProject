@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Tank : Agent {
     ITankLevels tankLevel;
-    EventBinding<RunEvent> runEventBinding;
 
     public Tank(ITankLevels tankLevel) {
         this.tankLevel = tankLevel; 
@@ -11,10 +10,6 @@ public class Tank : Agent {
     protected override void Start() {
         base.Start();
         tankLevel = new HardTank();;
-    }
-
-    private void OnDisable() {
-        EventBus<RunEvent>.Deregister(runEventBinding);
     }
 
     protected override void ExecuteBehaviour() {
@@ -76,8 +71,8 @@ public class Tank : Agent {
     }
 
     public void Attack() {
-        
         if (!OnAttackCoolDown()) {
+            FacePlayer();
             InvokeOnAttack();
         }
     }

@@ -8,6 +8,11 @@ public class Proyectile : MonoBehaviour {
     [SerializeField] float lifeTime = 5f;
     [SerializeField] int substractingVal;
 
+    // MÉTODO NUEVO: Para configurar dirección de disparo
+    public void SetShootingDirection(Vector3 direction) {
+        transform.forward = direction.normalized;
+    }
+
     public void SetLayer(bool isPlayerProjectile) {
         gameObject.layer = isPlayerProjectile ?
             LayerMask.NameToLayer("PlayerProjectiles") :
@@ -32,6 +37,7 @@ public class Proyectile : MonoBehaviour {
         if (other.GetComponent<StatHandler>()) {
             other.GetComponent<StatHandler>().Health -= substractingVal;
             Debug.Log($"Agent hit: {other.gameObject.name}, damage dealt: {substractingVal}");
+            Destroy(gameObject);
         }
         if (other.gameObject.CompareTag("Wall")) {
             Destroy(gameObject);

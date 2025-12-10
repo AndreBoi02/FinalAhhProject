@@ -24,8 +24,7 @@ public class PursuitBehaviour : SteeringBehaviour {
     /// </remarks>
     public override void Execute(Agent t_agent) {
         m_currentBehaviour = new SeekBehaviour();
-        float T = 3;
-        Vector3 futurePos = t_agent.GetTargetPos() + (t_agent.GetTarget().GetRigidbody().linearVelocity * T);
+        Vector3 futurePos = t_agent.GetTargetPos() + (t_agent.GetTarget().GetRigidbody().linearVelocity * t_agent.GetSteeringVars().m_predictionTime);
         t_agent.SetTargetPos(futurePos);
         m_currentBehaviour.Execute(t_agent);
     }

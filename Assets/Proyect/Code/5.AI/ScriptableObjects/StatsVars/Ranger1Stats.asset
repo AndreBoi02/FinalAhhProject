@@ -9,15 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b22ace3c5cca42c43969520ab96b6129, type: 3}
-  m_Name: RangerVars
+  m_Script: {fileID: 11500000, guid: aa4b0e35a4d0217428c8d41a85e31c92, type: 3}
+  m_Name: Ranger1Stats
   m_EditorClassIdentifier: 
-  SteeringVars:
-    maxVel: 3
-    maxForce: 1.5
-    maxSpeed: 5
-    slowingRadius: 2
-    m_proximity: 0
-    m_displacement: 0
-    m_radius: 0
-    m_predictionTime: 10
+  statsVars:
+    health: 100
+    mana: 0
+    ammo: 1000
+    hpPotion: 0
+    manaPotion: 0

@@ -186,20 +186,46 @@ public class AttackSystem : MonoBehaviour {
 
     void BowAttack() {
         if (_proyectile == null) {
-            Debug.LogError("Proyectil es null en BowAttack!");
             return;
         }
 
         QuitAnimation();
 
         Vector3 spawnOffset = transform.forward * 1.5f + Vector3.up * 0.5f;
-        GameObject tempProyectile = Instantiate(_proyectile,
-            transform.position + spawnOffset,
-            transform.rotation);
+        Vector3 spawnPosition = transform.position + spawnOffset;
+
+        Vector3 shootingDirection = transform.forward;
+
+        if (!TryGetComponent<PlayerController>(out _)) {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null && player.TryGetComponent<Rigidbody>(out var playerRb)) {
+                Ranger ranger = GetComponent<Ranger>();
+                bool shouldPredict = ranger == null || ranger.level == Ranger.Level.Hard;
+
+                if (shouldPredict) {
+                    float projectileSpeed = 25f;
+
+                    Vector3 baseDirection = (player.transform.position - spawnPosition).normalized;
+
+                    Vector3 predictedDirection = PredictionHelper.CalculateShootingDirection(
+                        spawnPosition,
+                        player.transform.position,
+                        playerRb.linearVelocity,
+                        projectileSpeed
+                    );
+
+                    shootingDirection = predictedDirection;
+                }
+            }
+        }
+
+        GameObject tempProyectile = Instantiate(_proyectile, spawnPosition, Quaternion.identity);
 
         Proyectile proyectileScript = tempProyectile.GetComponent<Proyectile>();
         if (proyectileScript != null) {
-            // Configura la layer según quién dispara
+
+            proyectileScript.SetShootingDirection(shootingDirection);
+
             bool isPlayer = TryGetComponent<PlayerController>(out _);
             proyectileScript.SetLayer(isPlayer);
         }
@@ -208,7 +234,7 @@ public class AttackSystem : MonoBehaviour {
     }
         #endregion
 
-        #region Magic
+    #region Magic
 
     void PrepareMagicAttack() {
         tempObject = Instantiate(_fireBallPV, worldPos, Quaternion.identity);

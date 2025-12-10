@@ -14,7 +14,7 @@ public class Mage : Agent {
     protected override void Start() {
         base.Start();
         //SetBehavior(new SeekBehaviour());
-        mageLevel = new HardMage();
+        mageLevel = new MediumMage();
     }
 
     protected override void ExecuteBehaviour() {

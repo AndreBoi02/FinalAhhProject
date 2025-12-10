@@ -1,16 +1,12 @@
-using UnityEngine;
 
-public class MediumRanger : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+public class MediumRanger : IRangerLevels {
+    public void Execute(Ranger ranger) {
+        if (ranger.IsPlayerInSideRadius()) {
+            ranger.MoveAwayFromPlayer();
+        }
+        else {
+            ranger.StayInPlace();
+            ranger.Attack();
+        }
     }
 }

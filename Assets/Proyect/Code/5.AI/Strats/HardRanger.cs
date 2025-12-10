@@ -1,16 +1,20 @@
 using UnityEngine;
 
-public class HardRanger : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+public class HardRanger : IRangerLevels {
+    public void Execute(Ranger ranger) {
+        if (ranger.DistanceFromPlayer() > 10) {
+            Debug.Log("Predicted Attack");
+            ranger.StayInPlace();
+            ranger.PredictPlayerPos();
+            ranger.Attack();
+        }
+        else if(!ranger.IsPlayerInSideRadius() && (ranger.DistanceFromPlayer() <= 10)) {
+            Debug.Log("Normal Attack");
+            ranger.StayInPlace();
+            ranger.Attack();
+        }
+        else {
+            ranger.MoveAwayFromPlayer();
+        }
     }
 }

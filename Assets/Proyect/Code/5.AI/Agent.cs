@@ -37,6 +37,11 @@ public struct SteeringVars{
         " \n ↑ Increase → Wider wandering area (more exploration)." +
         " \n ↓ Decrease → Narrower wandering area (more linear movement).")]
     [SerializeField] public float m_radius;
+
+    [Tooltip("Circular area around displacement point for random wander targets" +
+        " \n ↑ Increase → Wider wandering area (more exploration)." +
+        " \n ↓ Decrease → Narrower wandering area (more linear movement).")]
+    [SerializeField] public float m_predictionTime;
 }
 
 #endregion
@@ -166,7 +171,7 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
         }
     }
 
-    protected float DistanceFromPlayer() {
+    public float DistanceFromPlayer() {
         return Vector3.Distance(m_pos, m_targetPos);
     }
 
