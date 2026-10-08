@@ -1,16 +1,18 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(MoveVelocity))]
+[RequireComponent(typeof(MoveVelocity), typeof(DashController))]
 public class RPlayerController : MonoBehaviour {
     [SerializeField] private float _walkingSpeed;
     [SerializeField] private float _baseSpeed;
     [SerializeField] private float _runningSpeed;
 
     private MoveVelocity _moveVelocity;
+    private DashController _dashController;
 
     private void Awake() {
         _moveVelocity = GetComponent<MoveVelocity>();
+        _dashController = GetComponent<DashController>();
     }
 
     private void Start() {
@@ -39,6 +41,12 @@ public class RPlayerController : MonoBehaviour {
         }
         else if (context.canceled) {
             _moveVelocity.SetSpeed(_baseSpeed);
+        }
+    }
+
+    public void Dash(InputAction.CallbackContext context) {
+        if (context.performed) {
+            _dashController.Dash();
         }
     }
 }

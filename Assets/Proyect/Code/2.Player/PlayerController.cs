@@ -129,7 +129,7 @@ namespace FinalProyect {
             }
             yield return new WaitForSeconds(delay);
             if (rb) {
-                rb.linearVelocity = movementDir * normalSpeed;
+                rb.linearVelocity = Vector3.zero;
             }
             capsuleCollider.enabled = true;
         }
@@ -238,7 +238,7 @@ namespace FinalProyect {
             if (context.performed && statHandler.HpPotAvailable() && statHandler.Health != 100) {
                 statHandler.HpPot -= 1;
                 int wastedPoints = 0;
-                int consumedPoints = 20; // Valor de la poción
+                int consumedPoints = 20; // Valor de la pociï¿½n
 
                 if (statHandler.Health >= 81) {
                     // Calcular desperdicio
@@ -247,7 +247,7 @@ namespace FinalProyect {
 
                     // Puntos consumidos realmente
                     consumedPoints = 20 - wastedPoints;
-                    Debug.Log($"Poción desperdiciada: {wastedPoints} puntos");
+                    Debug.Log($"Pociï¿½n desperdiciada: {wastedPoints} puntos");
                 }
                 else {
                     statHandler.Health += 20;
@@ -262,7 +262,7 @@ namespace FinalProyect {
                 );
 
                 EventBus<PotionEfficiencyEvent>.Raise(potionEvent);
-                Debug.Log($"Poción usada. Consumido: {consumedPoints}, Desperdiciado: {wastedPoints}");
+                Debug.Log($"Pociï¿½n usada. Consumido: {consumedPoints}, Desperdiciado: {wastedPoints}");
             }
         }
 
@@ -272,7 +272,7 @@ namespace FinalProyect {
                 statHandler.ManaPot -= 1;
 
                 int wastedPoints = 0;
-                int consumedPoints = 15; // Valor de la poción
+                int consumedPoints = 15; // Valor de la pociï¿½n
 
                 if (statHandler.Mana >= 36) {
                     wastedPoints = ((int)statHandler.Mana + 15) - 50;
@@ -280,7 +280,7 @@ namespace FinalProyect {
 
                     // Puntos consumidos realmente
                     consumedPoints = 15 - wastedPoints;
-                    Debug.Log($"Mana poción desperdiciada: {wastedPoints} puntos");
+                    Debug.Log($"Mana pociï¿½n desperdiciada: {wastedPoints} puntos");
                 }
                 else {
                     statHandler.Mana += 15;
@@ -295,7 +295,7 @@ namespace FinalProyect {
                 );
 
                 EventBus<PotionEfficiencyEvent>.Raise(potionEvent); ;
-                Debug.Log($"Mana poción usada. Consumido: {consumedPoints}, Desperdiciado: {wastedPoints}");
+                Debug.Log($"Mana pociï¿½n usada. Consumido: {consumedPoints}, Desperdiciado: {wastedPoints}");
             }
         }
 
