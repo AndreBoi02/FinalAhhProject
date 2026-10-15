@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(MoveVelocity), typeof(DashController))]
+[RequireComponent(typeof(MoveVelocity), typeof(DashController), typeof(PotionHandler))]
 public class RPlayerController : MonoBehaviour {
     [SerializeField] private float _walkingSpeed;
     [SerializeField] private float _baseSpeed;
@@ -9,10 +9,12 @@ public class RPlayerController : MonoBehaviour {
 
     private MoveVelocity _moveVelocity;
     private DashController _dashController;
+    private PotionHandler _potionHandler;
 
     private void Awake() {
         _moveVelocity = GetComponent<MoveVelocity>();
         _dashController = GetComponent<DashController>();
+        _potionHandler = GetComponent<PotionHandler>();
     }
 
     private void Start() {
@@ -47,6 +49,18 @@ public class RPlayerController : MonoBehaviour {
     public void Dash(InputAction.CallbackContext context) {
         if (context.performed) {
             _dashController.Dash();
+        }
+    }
+
+    public void UseHpPot(InputAction.CallbackContext context) {
+        if (context.performed) {
+            _potionHandler.UseHpPot();
+        }
+    }
+
+    public void UseManaPot(InputAction.CallbackContext context) {
+        if (context.performed) {
+            _potionHandler.UseManaPot();
         }
     }
 }

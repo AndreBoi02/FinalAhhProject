@@ -68934,8 +68934,8 @@ MonoBehaviour:
     m_ActionName: Player Controller/Interact
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: FinalProyect.PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 7749131043196652431}
+        m_TargetAssemblyTypeName: RPlayerController, Assembly-CSharp
         m_MethodName: UseHpPot
         m_Mode: 0
         m_Arguments:
@@ -69014,8 +69014,8 @@ MonoBehaviour:
     m_ActionName: 'Player Controller/ClosePanel[/Keyboard/escape]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: FinalProyect.PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 7749131043196652431}
+        m_TargetAssemblyTypeName: RPlayerController, Assembly-CSharp
         m_MethodName: UseManaPot
         m_Mode: 0
         m_Arguments:
@@ -73657,6 +73657,8 @@ GameObject:
   - component: {fileID: 7749131043196652431}
   - component: {fileID: 7749131043196652432}
   - component: {fileID: 7749131043196652433}
+  - component: {fileID: 7749131043196652435}
+  - component: {fileID: 7749131043196652434}
   m_Layer: 10
   m_Name: Player (1)
   m_TagString: Player
@@ -75715,6 +75717,37 @@ MonoBehaviour:
   dashSpeed: 12.5
   dashCd: 1
   dashTimer: 0
+--- !u!114 &7749131043196652434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6359328116312812860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54ed02d1d17cabe459d951094323bc57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7749131043196652435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6359328116312812860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20f5d73ab385da74ba14b1c4ab822e83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterStatsSO: {fileID: 11400000, guid: ecea763645d3b8e47a45ccf77a3d3945, type: 2}
+  statsVars:
+    health: 0
+    mana: 0
+    ammo: 0
+    hpPotion: 0
+    manaPotion: 0
 --- !u!65 &7777488060670253603
 BoxCollider:
   m_ObjectHideFlags: 0
