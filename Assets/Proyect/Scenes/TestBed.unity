@@ -68866,7 +68866,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7749131043196652431}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RPlayerController, Assembly-CSharp
         m_MethodName: MovePlayer
         m_Mode: 0
@@ -68882,7 +68882,7 @@ MonoBehaviour:
     m_ActionName: 'Player Controller/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7749131043196652431}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RPlayerController, Assembly-CSharp
         m_MethodName: Dash
         m_Mode: 0
@@ -68898,7 +68898,7 @@ MonoBehaviour:
     m_ActionName: Player Controller/Dash
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7749131043196652431}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RPlayerController, Assembly-CSharp
         m_MethodName: ChangeSpeed
         m_Mode: 0
@@ -68914,7 +68914,7 @@ MonoBehaviour:
     m_ActionName: Player Controller/Run
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7749131043196652431}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RPlayerController, Assembly-CSharp
         m_MethodName: ChangeSpeed
         m_Mode: 0
@@ -68934,7 +68934,7 @@ MonoBehaviour:
     m_ActionName: Player Controller/Interact
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7749131043196652431}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RPlayerController, Assembly-CSharp
         m_MethodName: UseHpPot
         m_Mode: 0
@@ -68950,8 +68950,8 @@ MonoBehaviour:
     m_ActionName: Player Controller/QuickUseItem
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: FinalProyect.PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 7749131043196652430}
+        m_TargetAssemblyTypeName: RPlayerController, Assembly-CSharp
         m_MethodName: NextWeapon
         m_Mode: 0
         m_Arguments:
@@ -68966,8 +68966,8 @@ MonoBehaviour:
     m_ActionName: 'Player Controller/ChangeWeapon[/Keyboard/q,/Keyboard/e]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: FinalProyect.PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 7749131043196652430}
+        m_TargetAssemblyTypeName: RPlayerController, Assembly-CSharp
         m_MethodName: PrevWeapon
         m_Mode: 0
         m_Arguments:
@@ -68982,21 +68982,9 @@ MonoBehaviour:
     m_ActionName: 'Player Controller/PreviousWeapon[/Keyboard/q]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: FinalProyect.PlayerController, Assembly-CSharp
-        m_MethodName: OnClickDonw
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: FinalProyect.PlayerController, Assembly-CSharp
-        m_MethodName: OnClickUp
+      - m_Target: {fileID: 7749131043196652430}
+        m_TargetAssemblyTypeName: RPlayerController, Assembly-CSharp
+        m_MethodName: Attack
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -69014,7 +69002,7 @@ MonoBehaviour:
     m_ActionName: 'Player Controller/ClosePanel[/Keyboard/escape]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7749131043196652431}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RPlayerController, Assembly-CSharp
         m_MethodName: UseManaPot
         m_Mode: 0
@@ -73654,11 +73642,11 @@ GameObject:
   - component: {fileID: 5209398400835753581}
   - component: {fileID: 3136218536791018512}
   - component: {fileID: 7749131043196652430}
-  - component: {fileID: 7749131043196652431}
   - component: {fileID: 7749131043196652432}
-  - component: {fileID: 7749131043196652433}
+  - component: {fileID: 7749131043196652436}
   - component: {fileID: 7749131043196652435}
   - component: {fileID: 7749131043196652434}
+  - component: {fileID: 7749131043196652433}
   m_Layer: 10
   m_Name: Player (1)
   m_TagString: Player
@@ -75671,24 +75659,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 6359328116312812860}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5d832e2f600b1a478b84175062dbd74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7749131043196652431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6359328116312812860}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0449a82a176de7847807a6fa79caa6e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _walkingSpeed: 5
-  _baseSpeed: 10
-  _runningSpeed: 15
+  _walkingSpeed: 0
+  _baseSpeed: 0
+  _runningSpeed: 0
+  _moveVelocity: {fileID: 0}
+  _dashController: {fileID: 0}
+  _potionHandler: {fileID: 0}
+  _attackSystem: {fileID: 7749131043196652432}
+  _equipmentHandler: {fileID: 7749131043196652436}
 --- !u!114 &7749131043196652432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75698,10 +75679,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6359328116312812860}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef9babd026b2b1e4888be76f9ed0e9fe, type: 3}
+  m_Script: {fileID: 11500000, guid: 14b462a08ecd6c64b8a2ffaf86246714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cam: {fileID: 1344541077}
 --- !u!114 &7749131043196652433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75711,12 +75691,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6359328116312812860}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d50e04f16371f441a5c01c637e039f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 04a9abc0ac0620e44ab98ef86edd2f8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashSpeed: 12.5
-  dashCd: 1
-  dashTimer: 0
+  _bow: {fileID: 2935873037511050132}
+  _proyectile: {fileID: 0}
 --- !u!114 &7749131043196652434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75726,9 +75705,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6359328116312812860}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54ed02d1d17cabe459d951094323bc57, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e59b6fb37f66a74aa08216a922e72a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _sword: {fileID: 1872218428676182507}
+  attackCooldown: 0.5
 --- !u!114 &7749131043196652435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75738,16 +75719,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 6359328116312812860}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20f5d73ab385da74ba14b1c4ab822e83, type: 3}
+  m_Script: {fileID: 11500000, guid: 4622607c5b591c74a8887ede7cfe6e63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterStatsSO: {fileID: 11400000, guid: ecea763645d3b8e47a45ccf77a3d3945, type: 2}
-  statsVars:
-    health: 0
-    mana: 0
-    ammo: 0
-    hpPotion: 0
-    manaPotion: 0
+  _tome: {fileID: 8134810995614982617}
+  _fireBall: {fileID: 0}
+  _fireBallPV: {fileID: 0}
+--- !u!114 &7749131043196652436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6359328116312812860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 906c8fdca00626848994b02964330b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &7777488060670253603
 BoxCollider:
   m_ObjectHideFlags: 0

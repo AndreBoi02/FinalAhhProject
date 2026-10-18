@@ -1,24 +1,26 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(MoveVelocity), typeof(DashController), typeof(PotionHandler))]
+
 public class RPlayerController : MonoBehaviour {
     [SerializeField] private float _walkingSpeed;
     [SerializeField] private float _baseSpeed;
     [SerializeField] private float _runningSpeed;
 
-    private MoveVelocity _moveVelocity;
-    private DashController _dashController;
-    private PotionHandler _potionHandler;
+    [SerializeField] private MoveVelocity _moveVelocity;
+    [SerializeField] private DashController _dashController;
+    [SerializeField] private PotionHandler _potionHandler;
+    [SerializeField] private RAttackSystem _attackSystem;
+    [SerializeField] private EquipmentHandler _equipmentHandler;
 
     private void Awake() {
-        _moveVelocity = GetComponent<MoveVelocity>();
-        _dashController = GetComponent<DashController>();
-        _potionHandler = GetComponent<PotionHandler>();
+        //_moveVelocity = GetComponent<MoveVelocity>();
+        //_dashController = GetComponent<DashController>();
+        //_potionHandler = GetComponent<PotionHandler>();
     }
 
     private void Start() {
-        _moveVelocity.SetSpeed(_baseSpeed);
+        //_moveVelocity.SetSpeed(_baseSpeed);
     }
 
     public void MovePlayer(InputAction.CallbackContext context) {
@@ -61,6 +63,30 @@ public class RPlayerController : MonoBehaviour {
     public void UseManaPot(InputAction.CallbackContext context) {
         if (context.performed) {
             _potionHandler.UseManaPot();
+        }
+    }
+
+    public void NextWeapon(InputAction.CallbackContext context) {
+        if (context.performed) {
+            _equipmentHandler.NextWeapon();
+        }
+    }
+
+    public void PrevWeapon(InputAction.CallbackContext context) {
+        if(context.performed) {
+        _equipmentHandler.PrevWeapon();
+        }
+    }
+    
+    public void holdClickPrepareAttack(InputAction.CallbackContext context) {
+        if (context.performed) {
+            _attackSystem.PrepareAttack();
+        }
+    }
+
+    public void SingleClickAttack(InputAction.CallbackContext context) {
+        if (context.canceled) {
+            _attackSystem.ExecuteAttack();
         }
     }
 }
