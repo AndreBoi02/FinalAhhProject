@@ -1,7 +1,7 @@
-
 public interface IWeapon {
-    public void Equip();
-    public void Unequip();
-    public void PrepareAttack();
-    public void ExecuteAttack();
+    void Initialize(CharacterAnimationHandler animHandler);
+    void Equip();
+    void Unequip();
+    void PrepareAttack();
+    void ExecuteAttack();
 }

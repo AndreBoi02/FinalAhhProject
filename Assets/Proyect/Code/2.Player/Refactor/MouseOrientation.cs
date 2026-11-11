@@ -1,9 +1,21 @@
 using UnityEngine;
 
 public class MouseOrientation : MonoBehaviour {
-    [SerializeField] Camera _cam;
+    [SerializeField] private Camera _cam;
 
-    Vector3 GetMouseWorldPosition() {
+    private RAttackSystem _attackSystem;
+    private Vector3 worldPos;
+
+    public Vector3 WorldPos => worldPos;
+
+    private void Awake() {
+        _attackSystem = GetComponent<RAttackSystem>();
+        if (_cam == null) _cam = Camera.main;
+    }
+
+    private Vector3 GetMouseWorldPosition() {
+        if (_cam == null) return Vector3.zero;
+
         Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit, 10000f, LayerMask.GetMask("Floor"))) {
@@ -12,15 +24,20 @@ public class MouseOrientation : MonoBehaviour {
         return Vector3.zero;
     }
 
-    Vector3 worldPos;
     private void FixedUpdate() {
         worldPos = GetMouseWorldPosition();
         LookAtMouseDir(worldPos);
+
+        if (_attackSystem != null) {
+            _attackSystem.TargetPosition = worldPos;
+        }
     }
 
-    void LookAtMouseDir(Vector3 worldPos) {
-        Vector3 LookAt = worldPos - transform.position;
-        LookAt.y = 0;
-        transform.rotation = Quaternion.LookRotation(LookAt);
+    private void LookAtMouseDir(Vector3 targetPos) {
+        Vector3 lookAt = targetPos - transform.position;
+        lookAt.y = 0;
+        if (lookAt != Vector3.zero) {
+            transform.rotation = Quaternion.LookRotation(lookAt);
+        }
     }
 }

@@ -2,6 +2,9 @@ using UnityEngine;
 
 [RequireComponent(typeof(StatHandler))]
 public class PotionHandler : MonoBehaviour {
+    [SerializeField] private float potionCooldown = 0.25f;
+    private float lastPotionTime = -999f;
+
     private StatHandler statHandler;
 
     private void Awake() {
@@ -9,7 +12,10 @@ public class PotionHandler : MonoBehaviour {
     }
 
     public void UseHpPot() {
+        if (Time.time < lastPotionTime + potionCooldown) return;
+
         if (statHandler.HpPotAvailable() && statHandler.Health != 100) {
+            lastPotionTime = Time.time;
             statHandler.HpPot -= 1;
             int wastedPoints = 0;
             int consumedPoints = 20; // Valor de la poción
@@ -26,11 +32,23 @@ public class PotionHandler : MonoBehaviour {
             else {
                 statHandler.Health += 20;
             }
+
+            // Disparar evento para DataMiner / Telemetría
+            PotionEfficiencyEvent potionEvent = new PotionEfficiencyEvent(
+                gameObject,
+                consumedPoints,
+                wastedPoints,
+                "HP"
+            );
+            EventBus<PotionEfficiencyEvent>.Raise(potionEvent);
         }
     }
 
     public void UseManaPot() {
+        if (Time.time < lastPotionTime + potionCooldown) return;
+
         if (statHandler.ManaPotAvailable() && statHandler.Mana != 50) {
+            lastPotionTime = Time.time;
             statHandler.ManaPot -= 1;
             int wastedPoints = 0;
             int consumedPoints = 15; // Valor de la poción
@@ -46,6 +64,15 @@ public class PotionHandler : MonoBehaviour {
             else {
                 statHandler.Mana += 15;
             }
+
+            // Disparar evento para DataMiner / Telemetría
+            PotionEfficiencyEvent potionEvent = new PotionEfficiencyEvent(
+                gameObject,
+                consumedPoints,
+                wastedPoints,
+                "Mana"
+            );
+            EventBus<PotionEfficiencyEvent>.Raise(potionEvent);
         }
     }
 }

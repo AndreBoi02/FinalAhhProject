@@ -3,12 +3,16 @@ using UnityEngine;
 
 [RequireComponent(typeof(RAttackSystem))]
 public class EquipmentHandler : MonoBehaviour {
+    [SerializeField] private CharacterAnimationHandler _animHandler;
     private RAttackSystem _attackSystem;
 
-    int weaponIdx = 0;
+    private int weaponIdx = 0;
     private List<IWeapon> weapons = new List<IWeapon>();
 
     private void Awake() {
+        if (_animHandler == null) {
+            _animHandler = GetComponent<CharacterAnimationHandler>();
+        }
         _attackSystem = GetComponent<RAttackSystem>();
         InitializeWeaponsList();
     }
@@ -29,6 +33,7 @@ public class EquipmentHandler : MonoBehaviour {
             if (w == null) continue;
 
             if (!weapons.Contains(w)) {
+                w.Initialize(_animHandler);
                 weapons.Add(w);
                 Debug.Log($"Weapon {w} added at index {weapons.Count - 1}");
             }
