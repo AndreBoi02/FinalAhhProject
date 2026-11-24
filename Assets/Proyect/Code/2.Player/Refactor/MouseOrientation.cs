@@ -4,12 +4,14 @@ public class MouseOrientation : MonoBehaviour {
     [SerializeField] private Camera _cam;
 
     private RAttackSystem _attackSystem;
+    private StatHandler _statHandler;
     private Vector3 worldPos;
 
     public Vector3 WorldPos => worldPos;
 
     private void Awake() {
         _attackSystem = GetComponent<RAttackSystem>();
+        _statHandler = GetComponentInParent<StatHandler>();
         if (_cam == null) _cam = Camera.main;
     }
 
@@ -25,6 +27,8 @@ public class MouseOrientation : MonoBehaviour {
     }
 
     private void FixedUpdate() {
+        if (_statHandler != null && !_statHandler.IsPlayerAlive()) return;
+
         worldPos = GetMouseWorldPosition();
         LookAtMouseDir(worldPos);
 

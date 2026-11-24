@@ -34,8 +34,9 @@ public class PotionHandler : MonoBehaviour {
             }
 
             // Disparar evento para DataMiner / Telemetría
+            GameObject userObj = transform.root.gameObject;
             PotionEfficiencyEvent potionEvent = new PotionEfficiencyEvent(
-                gameObject,
+                userObj,
                 consumedPoints,
                 wastedPoints,
                 "HP"
@@ -66,8 +67,9 @@ public class PotionHandler : MonoBehaviour {
             }
 
             // Disparar evento para DataMiner / Telemetría
+            GameObject userObj = transform.root.gameObject;
             PotionEfficiencyEvent potionEvent = new PotionEfficiencyEvent(
-                gameObject,
+                userObj,
                 consumedPoints,
                 wastedPoints,
                 "Mana"

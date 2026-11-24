@@ -18,6 +18,8 @@ public class DashController : MonoBehaviour {
         canDash = false;
         _moveVelocity.StartDash(dashSpeed);
         dashTimer = 0;
+
+        NotifyDashUI(0f);
         StartCoroutine(StopDashAndInmunity(0.2f));
         StartCoroutine(SmoothDashCooldown(dashCd));
     }
@@ -37,11 +39,22 @@ public class DashController : MonoBehaviour {
             float smoothProgress = Mathf.SmoothStep(0f, 1f, progress);
 
             dashTimer = smoothProgress * totalCooldownTime;
+            NotifyDashUI(dashTimer);
 
             yield return null;
         }
 
         dashTimer = totalCooldownTime;
+        NotifyDashUI(dashTimer);
         canDash = true;
+    }
+
+    private void NotifyDashUI(float currentCd) {
+        bool isPlayer = CompareTag("Player") || (transform.root != null && transform.root.CompareTag("Player"));
+        if (isPlayer) {
+            EventBus<DashEvent>.Raise(new DashEvent {
+                OnDashCDChanged = Mathf.Floor(currentCd * 100f) / 100f
+            });
+        }
     }
 }

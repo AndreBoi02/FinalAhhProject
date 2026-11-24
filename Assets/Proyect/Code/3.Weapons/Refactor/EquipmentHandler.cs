@@ -58,5 +58,23 @@ public class EquipmentHandler : MonoBehaviour {
         Debug.Log($"Swapped to {weapons[weaponIdx]}");
         weapons[weaponIdx].Equip();
         _attackSystem.SetWeapon(weapons[weaponIdx]);
+
+        // Raise WeaponChangedEvent for HUDHandler / UI
+        bool isPlayer = CompareTag("Player") || (transform.root != null && transform.root.CompareTag("Player"));
+        if (isPlayer) {
+            int uiIndex = GetUIIndex(weapons[weaponIdx]);
+            EventBus<CombatEvent.WeaponChangedEvent>.Raise(new CombatEvent.WeaponChangedEvent {
+                entity = gameObject,
+                weaponIndex = uiIndex,
+                isPlayer = true
+            });
+        }
+    }
+
+    private int GetUIIndex(IWeapon weapon) {
+        if (weapon is FireBallAttackHandler) return 0; // 0 = Tome
+        if (weapon is BowAttackHandler) return 1;      // 1 = Bow
+        if (weapon is SwordAttackHandler) return 2;    // 2 = Sword
+        return weaponIdx;
     }
 }

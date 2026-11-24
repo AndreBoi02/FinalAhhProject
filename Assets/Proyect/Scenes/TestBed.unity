@@ -1793,7 +1793,7 @@ GameObject:
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &79761839
 Transform:
   m_ObjectHideFlags: 0
@@ -19535,7 +19535,7 @@ GameObject:
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &663939357
 Transform:
   m_ObjectHideFlags: 0
@@ -33454,7 +33454,7 @@ GameObject:
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1078609057
 Transform:
   m_ObjectHideFlags: 0
@@ -36153,7 +36153,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1168233488
 Transform:
   m_ObjectHideFlags: 0
@@ -40468,6 +40468,10 @@ PrefabInstance:
     - target: {fileID: 5642131964810687147, guid: 104d17a4a3ec17a47b46c227594207a3, type: 3}
       propertyPath: m_Name
       value: Ranger
+      objectReference: {fileID: 0}
+    - target: {fileID: 5642131964810687147, guid: 104d17a4a3ec17a47b46c227594207a3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -48580,7 +48584,7 @@ GameObject:
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1628967965
 Transform:
   m_ObjectHideFlags: 0
@@ -60229,7 +60233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1974784942
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -60725,7 +60729,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1990689696
 Transform:
   m_ObjectHideFlags: 0
@@ -63941,7 +63945,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2111599522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70722,7 +70726,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6359328118174675449, guid: b15840351e6436949bc8f567591dc3fa, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7547035820271887522, guid: b15840351e6436949bc8f567591dc3fa, type: 3}
       propertyPath: _cam
@@ -75718,6 +75722,7 @@ MonoBehaviour:
   _proyectile: {fileID: 2348712055330108638, guid: c69cf83bb71e8b845af719c1c870dae4, type: 3}
   projectileSpeed: 25
   spawnOffset: {x: 0, y: 0.5, z: 1.5}
+  attackCooldown: 0.5
 --- !u!114 &7749131043196652434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75750,6 +75755,7 @@ MonoBehaviour:
   arcHeight: 3
   customGravity: -15
   manaCost: 10
+  attackCooldown: 0.8
 --- !u!114 &7749131043196652436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75813,7 +75819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d50e04f16371f441a5c01c637e039f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashSpeed: 20
+  dashSpeed: 10
   dashCd: 1.5
   dashTimer: 0
 --- !u!114 &7749131043196652442
