@@ -38,26 +38,19 @@ public class Ranger : Agent {
     }
 
     protected override void ExecuteBehaviour() {
-        
-        rangerLevel.Execute(this);
+        rangerLevel?.Execute(this);
     }
 
     public void StayInPlace() {
         m_rb.linearVelocity = Vector3.zero;
-        EventBus<RunEvent>.Raise(new RunEvent {
-            Source = gameObject,
-            isRunnig = false
-        });
+        m_animHandler?.SetMoving(false);
     }
 
     public void MoveAwayFromPlayer() {
         SetBehavior(new FleeBehaviour());
         m_currentBehaviour?.Execute(this);
         m_rb.linearVelocity = m_currentVel;
-        EventBus<RunEvent>.Raise(new RunEvent {
-            Source = gameObject,
-            isRunnig = true
-        });
+        m_animHandler?.SetMoving(true);
     }
 
     public void PredictPlayerPos() {
@@ -69,13 +62,16 @@ public class Ranger : Agent {
     public void Attack() {
         FacePlayer();
         if (!OnAttackCoolDown()) {
+            if (m_attackSystem != null) {
+                m_attackSystem.TargetPosition = m_targetPos;
+            }
             StartCoroutine(InvokeRange());
         }
     }
 
     IEnumerator InvokeRange() {
-        PrepareOnAttack();
+        m_attackSystem?.PrepareAttack();
         yield return new WaitForSeconds(.65f);
-        InvokeOnAttack();
+        m_attackSystem?.ExecuteAttack();
     }
 }

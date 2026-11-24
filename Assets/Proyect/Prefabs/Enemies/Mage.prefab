@@ -589,9 +589,10 @@ GameObject:
   - component: {fileID: 3647474078086240803}
   - component: {fileID: 6791162606174803815}
   - component: {fileID: 97466787967713292}
-  - component: {fileID: 6691466602911151551}
   - component: {fileID: 8632752672458877572}
-  - component: {fileID: 88566915212951542}
+  - component: {fileID: 5041949631779594978}
+  - component: {fileID: 5731254499045824411}
+  - component: {fileID: 6821304961783468612}
   m_Layer: 11
   m_Name: Mage
   m_TagString: Enemy
@@ -680,6 +681,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c8492578dbae894cbdd59a192e9899f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_attackSystem: {fileID: 0}
+  m_animHandler: {fileID: 0}
   m_aTarget: {fileID: 0}
   m_EnemyVars: {fileID: 0}
   sheltered: {fileID: 0}
@@ -696,25 +699,6 @@ MonoBehaviour:
   healSpellAmount: 2
   healAmount: 20
   tpSpellAmount: 3
---- !u!114 &6691466602911151551
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4449576364988577646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a48a549c86e534042b34916994a6f452, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weapon: 0
-  _sword: {fileID: 5998837922930865146}
-  _bow: {fileID: 7525812063717396645}
-  _tome: {fileID: 7728193327368623951}
-  _proyectile: {fileID: 0}
-  _fireBall: {fileID: 8454173372295801628, guid: 93c8f383321b7304094e857f038c9689, type: 3}
-  _fireBallPV: {fileID: 8454173372295801628, guid: 9834222600fdcf74ba0bde264d056b56, type: 3}
 --- !u!114 &8632752672458877572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -734,7 +718,7 @@ MonoBehaviour:
     ammo: 0
     hpPotion: 0
     manaPotion: 0
---- !u!114 &88566915212951542
+--- !u!114 &5041949631779594978
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -743,10 +727,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 4449576364988577646}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0bc91577aecfca49bd4e8decec03217, type: 3}
+  m_Script: {fileID: 11500000, guid: 14b462a08ecd6c64b8a2ffaf86246714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 4455773258302055846}
+  _animHandler: {fileID: 0}
+--- !u!114 &5731254499045824411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4449576364988577646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4622607c5b591c74a8887ede7cfe6e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tome: {fileID: 7728193327368623951}
+  _fireBall: {fileID: 8454173372295801628, guid: 93c8f383321b7304094e857f038c9689, type: 3}
+  _fireBallPV: {fileID: 8454173372295801628, guid: 9834222600fdcf74ba0bde264d056b56, type: 3}
+  arcHeight: 3
+  customGravity: -15
+  manaCost: 10
+  attackCooldown: 0.8
+--- !u!114 &6821304961783468612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4449576364988577646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fed622d0f8ee17419240944d3eb9b1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 4455773258302055846}
 --- !u!1 &4708482635385995259
 GameObject:
   m_ObjectHideFlags: 0

@@ -941,9 +941,10 @@ GameObject:
   - component: {fileID: 373908987066327449}
   - component: {fileID: 6248767485144042557}
   - component: {fileID: 1878592684596495909}
-  - component: {fileID: 9010797828755740442}
   - component: {fileID: 5120801771591249021}
-  - component: {fileID: 1960103070643309344}
+  - component: {fileID: 376801716323923301}
+  - component: {fileID: 2615139432807409761}
+  - component: {fileID: 7119015718344380501}
   m_Layer: 11
   m_Name: Ranger
   m_TagString: Enemy
@@ -1032,6 +1033,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78fbfd48149ae6340972bcc3d18b9232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_attackSystem: {fileID: 0}
+  m_animHandler: {fileID: 0}
   m_aTarget: {fileID: 0}
   m_EnemyVars: {fileID: 11400000, guid: 3ca2b82ef33c0b8478d22cc88e17ec9a, type: 2}
   sheltered: {fileID: 0}
@@ -1040,25 +1043,6 @@ MonoBehaviour:
   attackCoolDown: 4
   level: 0
   projectileSpeed: 15
---- !u!114 &9010797828755740442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5642131964810687147}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a48a549c86e534042b34916994a6f452, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weapon: 1
-  _sword: {fileID: 3256584579523887552}
-  _bow: {fileID: 1451963029539168025}
-  _tome: {fileID: 4132786031031507797}
-  _proyectile: {fileID: 2348712055330108638, guid: 1eb45d176019cd5488f2b10f1f802a03, type: 3}
-  _fireBall: {fileID: 0}
-  _fireBallPV: {fileID: 0}
 --- !u!114 &5120801771591249021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1078,7 +1062,7 @@ MonoBehaviour:
     ammo: 0
     hpPotion: 0
     manaPotion: 0
---- !u!114 &1960103070643309344
+--- !u!114 &376801716323923301
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1087,10 +1071,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 5642131964810687147}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0bc91577aecfca49bd4e8decec03217, type: 3}
+  m_Script: {fileID: 11500000, guid: 14b462a08ecd6c64b8a2ffaf86246714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 1782126002714316089}
+  _animHandler: {fileID: 0}
+--- !u!114 &2615139432807409761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5642131964810687147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a9abc0ac0620e44ab98ef86edd2f8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bow: {fileID: 1451963029539168025}
+  _proyectile: {fileID: 2348712055330108638, guid: 1eb45d176019cd5488f2b10f1f802a03, type: 3}
+  projectileSpeed: 25
+  spawnOffset: {x: 0, y: 0.5, z: 1.5}
+  attackCooldown: 0.5
+--- !u!114 &7119015718344380501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5642131964810687147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fed622d0f8ee17419240944d3eb9b1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 1782126002714316089}
 --- !u!1 &5979134550115314135
 GameObject:
   m_ObjectHideFlags: 0

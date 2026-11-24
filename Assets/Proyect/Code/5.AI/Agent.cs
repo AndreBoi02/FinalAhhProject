@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 #region Struct
 [System.Serializable]
@@ -43,16 +43,18 @@ public struct SteeringVars{
         " \n ↓ Decrease → Narrower wandering area (more linear movement).")]
     [SerializeField] public float m_predictionTime;
 }
-
 #endregion
 
-[RequireComponent(typeof(Rigidbody), typeof(AttackSystem))]
-public abstract class Agent : MonoBehaviour, IAttackSystem {
+[RequireComponent(typeof(Rigidbody))]
+public abstract class Agent : MonoBehaviour {
 
     #region References
-    protected AttackSystem m_attackSystem => GetComponent<AttackSystem>();
+    [SerializeField] protected RAttackSystem m_attackSystem;
+    [SerializeField] protected CharacterAnimationHandler m_animHandler;
     protected Rigidbody m_rb => GetComponent<Rigidbody>();
     [SerializeField] protected Agent m_aTarget;
+    protected Transform m_targetTransform;
+    protected Rigidbody m_targetRb;
 
     [SerializeField] SO_EnemyVariables m_EnemyVars;
     SteeringVars m_steeringVars;
@@ -61,7 +63,6 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     #endregion
 
     #region Runtime Var
-
     protected Vector3 m_pos => transform.position;
     protected Vector3 m_targetPos;
     protected Vector3 m_currentVel;
@@ -71,21 +72,26 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
 
     protected ISteeringBehaviour m_currentBehaviour;
     EventBinding<DeathEvent> deathEvent;
+    protected bool isDead = false;
 
     protected virtual void Start() {
         deathEvent = new EventBinding<DeathEvent>(StopAll);
         EventBus<DeathEvent>.Register(deathEvent);
 
+        if (m_attackSystem == null) m_attackSystem = GetComponent<RAttackSystem>();
+        if (m_animHandler == null) m_animHandler = GetComponent<CharacterAnimationHandler>();
         m_statHandler = GetComponent<StatHandler>();
 
-        m_targetPos = m_aTarget != null ? m_aTarget.transform.position : Vector3.zero;
+        AcquireTarget();
 
-        if(m_EnemyVars != null)
+        if (m_EnemyVars != null)
             m_steeringVars = m_EnemyVars.SteeringVars;
     }
 
     void Update() {
-        m_statHandler.PlayerAlive();
+        if (m_statHandler != null) {
+            m_statHandler.PlayerAlive();
+        }
     }
 
     private void OnDisable() {
@@ -93,11 +99,60 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     }
 
     protected virtual void FixedUpdate() {
+        if (isDead) return;
+
+        if (m_targetTransform == null || !m_targetTransform.gameObject.activeInHierarchy) {
+            AcquireTarget();
+        }
+
+        if (m_targetTransform != null) {
+            m_targetPos = m_targetTransform.position;
+        } else if (m_aTarget != null) {
+            m_targetPos = m_aTarget.transform.position;
+        }
+
+        if (m_attackSystem != null) {
+            m_attackSystem.TargetPosition = m_targetPos;
+        }
+
         ExecuteBehaviour();
-        m_targetPos = m_aTarget != null ? m_aTarget.transform.position : Vector3.zero;
     }
      
     protected virtual void ExecuteBehaviour() { }
+
+    public void AcquireTarget() {
+        // If m_aTarget is already set and active, use it
+        if (m_aTarget != null && m_aTarget.gameObject.activeInHierarchy) {
+            m_targetTransform = m_aTarget.transform;
+            m_targetRb = m_aTarget.GetRigidbody();
+            m_targetPos = m_targetTransform.position;
+            return;
+        }
+
+        // Find active player GameObject in the scene
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject p in players) {
+            if (p.activeInHierarchy) {
+                // Check if it's the main player root (has controller or agent)
+                if (p.GetComponent<RPlayerController>() != null || p.GetComponent<Agent>() != null) {
+                    m_targetTransform = p.transform;
+                    m_targetRb = p.GetComponent<Rigidbody>();
+                    m_aTarget = p.GetComponent<Agent>();
+                    m_targetPos = m_targetTransform.position;
+                    return;
+                }
+            }
+        }
+
+        // Fallback: any active object with tag "Player"
+        GameObject fallback = GameObject.FindWithTag("Player");
+        if (fallback != null && fallback.activeInHierarchy) {
+            m_targetTransform = fallback.transform;
+            m_targetRb = fallback.GetComponent<Rigidbody>();
+            m_aTarget = fallback.GetComponent<Agent>();
+            m_targetPos = m_targetTransform.position;
+        }
+    }
 
     private void OnDrawGizmos() {
         Gizmos.color = Color.cyan;
@@ -107,7 +162,17 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     #region Getters & Setters
 
     public Agent GetTarget() {
-    return m_aTarget; 
+        return m_aTarget; 
+    }
+
+    public Transform GetTargetTransform() {
+        return m_targetTransform;
+    }
+
+    public Rigidbody GetTargetRigidbody() {
+        if (m_targetRb != null) return m_targetRb;
+        if (m_aTarget != null) return m_aTarget.GetRigidbody();
+        return null;
     }
     
     public Rigidbody GetRigidbody() {
@@ -143,7 +208,25 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     }
 
     public void SetTarget(Agent t_agent) {
-        m_aTarget = t_agent;
+        if (t_agent != null && t_agent.gameObject.activeInHierarchy) {
+            m_aTarget = t_agent;
+            m_targetTransform = t_agent.transform;
+            m_targetRb = t_agent.GetRigidbody();
+            m_targetPos = m_targetTransform.position;
+        } else {
+            AcquireTarget();
+        }
+    }
+
+    public void SetTargetTransform(Transform t_transform) {
+        if (t_transform != null && t_transform.gameObject.activeInHierarchy) {
+            m_targetTransform = t_transform;
+            m_targetRb = t_transform.GetComponent<Rigidbody>();
+            m_aTarget = t_transform.GetComponent<Agent>();
+            m_targetPos = m_targetTransform.position;
+        } else {
+            AcquireTarget();
+        }
     }
 
     protected void SetBehavior(ISteeringBehaviour newBehaviour) {
@@ -152,12 +235,12 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
 
     #endregion
 
-    #region Trash
+    #region Utility & Combat Helpers
 
     [Header("Rotation Settings")]
     [SerializeField] protected float rotationSpeed = 5f;
 
-    protected virtual void FacePlayer() {
+    public virtual void FacePlayer() {
         Vector3 direction = (m_targetPos - transform.position).normalized;
         direction.y = 0;
 
@@ -177,14 +260,12 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
 
     [SerializeField] protected float safetyDistance;
     public bool IsPlayerInSideRadius() {
-        if (DistanceFromPlayer() < safetyDistance)
-            return true;
-        return false;
+        return DistanceFromPlayer() < safetyDistance;
     }
 
     [SerializeField] protected float attackCoolDown;
     protected float attackCounter;
-    protected bool OnAttackCoolDown() {
+    public bool OnAttackCoolDown() {
         if (attackCounter > attackCoolDown) {
             attackCounter = 0;
             return false;
@@ -194,27 +275,21 @@ public abstract class Agent : MonoBehaviour, IAttackSystem {
     }
     #endregion
 
-    public virtual event System.Action OnPrepareAttack;
-    public virtual event System.Action OnAttack;
-
-    public AttackSystem AttackSystem => m_attackSystem;
-
-    protected virtual void PrepareOnAttack() {
-        OnPrepareAttack?.Invoke();
-    }
-
-    protected virtual void InvokeOnAttack() {
-        OnAttack?.Invoke();
-    }
+    public RAttackSystem AttackSystem => m_attackSystem;
 
     public StatHandler GetStatHandler() {
         return m_statHandler;
     }
 
-    bool isDead = false;
     void StopAll(DeathEvent deathEvent) {
         if (deathEvent.Source == gameObject) {
             isDead = deathEvent.isDead;
+            if (isDead) {
+                m_currentVel = Vector3.zero;
+                if (m_rb != null) m_rb.linearVelocity = Vector3.zero;
+                m_animHandler?.SetMoving(false);
+                m_animHandler?.PlayDeath(true);
+            }
             EreaseEnemy();
         }
     }

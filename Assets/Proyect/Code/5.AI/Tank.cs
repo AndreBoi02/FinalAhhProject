@@ -38,10 +38,7 @@ public class Tank : Agent {
 
     public void StayInPlace() {
         m_rb.linearVelocity = Vector3.zero;
-        EventBus<RunEvent>.Raise(new RunEvent {
-            Source = gameObject,
-            isRunnig = false
-        });
+        m_animHandler?.SetMoving(false);
     }
 
     public void GoForThePlayerSeek() {
@@ -49,10 +46,7 @@ public class Tank : Agent {
         FacePlayer();
         m_currentBehaviour?.Execute(this);
         m_rb.linearVelocity = m_currentVel;
-        EventBus<RunEvent>.Raise(new RunEvent{
-            Source = gameObject,
-            isRunnig = true
-        });
+        m_animHandler?.SetMoving(true);
     }
 
     public void PredictPlayer() {
@@ -61,10 +55,7 @@ public class Tank : Agent {
             SetBehavior(new PursuitBehaviour());
             m_currentBehaviour?.Execute(this);
             m_rb.linearVelocity = m_currentVel;
-            EventBus<RunEvent>.Raise(new RunEvent {
-                Source = gameObject,
-                isRunnig = true
-            });
+            m_animHandler?.SetMoving(true);
         }
         else {
             GoForThePlayerSeek();
@@ -76,24 +67,19 @@ public class Tank : Agent {
         FacePlayer();
         m_currentBehaviour?.Execute(this);
         m_rb.linearVelocity = m_currentVel;
-        if(m_aTarget.GetRigidbody().linearVelocity != Vector3.zero) {
-            EventBus<RunEvent>.Raise(new RunEvent {
-                Source = gameObject,
-                isRunnig = true
-            });
+        Rigidbody targetRb = GetTargetRigidbody();
+        if(targetRb != null && targetRb.linearVelocity != Vector3.zero) {
+            m_animHandler?.SetMoving(true);
         }
         else {
-            EventBus<RunEvent>.Raise(new RunEvent {
-                Source = gameObject,
-                isRunnig = false
-            });
+            m_animHandler?.SetMoving(false);
         }
     }
 
     public void Attack() {
         if (!OnAttackCoolDown()) {
             FacePlayer();
-            InvokeOnAttack();
+            m_attackSystem?.ExecuteAttack();
         }
     }
 }

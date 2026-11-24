@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using static Ranger;
 
 public class Mage : Agent {
     IMageLevels mageLevel;
@@ -42,9 +41,11 @@ public class Mage : Agent {
     }
 
     public void Attack() {
+        FacePlayer();
         if (!OnAttackCoolDown()) {
-            FacePlayer();
-            AttackSystem.SetWorldPosVector(m_targetPos);
+            if (m_attackSystem != null) {
+                m_attackSystem.TargetPosition = m_targetPos;
+            }
             StartCoroutine(InvokeMagic());
         }
     }
@@ -63,22 +64,26 @@ public class Mage : Agent {
     [Header("Teleport vars")]
     [SerializeField] int tpSpellAmount;
     public void TpAwayFromPlayer() {
-        if (tpSpellAmount < 0) return;
+        if (tpSpellAmount < 0 || tpPoints == null || tpPoints.Length == 0) return;
         float furthestDistanceFromPlayer = 0;
         int idxTp = 0;
-        for (int i =0; i < tpPoints.Length - 1; i++) {
-            if (furthestDistanceFromPlayer < Vector3.Distance(GetTargetPos(), tpPoints[i].position)) {
-                furthestDistanceFromPlayer = Vector3.Distance(GetTargetPos(), tpPoints[i].position);
+        for (int i = 0; i < tpPoints.Length; i++) {
+            if (tpPoints[i] == null) continue;
+            float dist = Vector3.Distance(GetTargetPos(), tpPoints[i].position);
+            if (furthestDistanceFromPlayer < dist) {
+                furthestDistanceFromPlayer = dist;
                 idxTp = i;
             }
         }
-        transform.position = tpPoints[idxTp].position;
+        if (tpPoints[idxTp] != null) {
+            transform.position = tpPoints[idxTp].position;
+        }
         tpSpellAmount -= 1;
     }
 
     IEnumerator InvokeMagic() {
-        PrepareOnAttack();
+        m_attackSystem?.PrepareAttack();
         yield return new WaitForSeconds(.65f);
-        InvokeOnAttack();
+        m_attackSystem?.ExecuteAttack();
     }
 }

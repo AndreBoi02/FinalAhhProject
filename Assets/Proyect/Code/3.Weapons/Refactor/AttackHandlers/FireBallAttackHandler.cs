@@ -99,14 +99,25 @@ public class FireBallAttackHandler : MonoBehaviour, IWeapon {
     }
 
     private void CastFireball() {
-        Vector3 targetPos = _attackSystem != null && _attackSystem.TargetPosition != Vector3.zero
-            ? _attackSystem.TargetPosition
-            : transform.position + transform.forward * 5f;
+        bool isPlayer = CompareTag("Player") || (transform.root != null && transform.root.CompareTag("Player"));
+
+        Vector3 targetPos;
+        if (_attackSystem != null && _attackSystem.TargetPosition != Vector3.zero) {
+            targetPos = _attackSystem.TargetPosition;
+        } else if (_attackSystem != null && !isPlayer) {
+            // For AI, even if target happens to be at (0,0,0), use it if valid
+            Agent agent = GetComponentInParent<Agent>();
+            if (agent != null && agent.GetTargetTransform() != null) {
+                targetPos = agent.GetTargetPos();
+            } else {
+                targetPos = _attackSystem.TargetPosition;
+            }
+        } else {
+            targetPos = transform.position + transform.forward * 5f;
+        }
 
         GameObject fireballObj = Instantiate(_fireBall, transform.position, Quaternion.identity);
         Fireball fireball = fireballObj.GetComponent<Fireball>();
-
-        bool isPlayer = CompareTag("Player") || (transform.root != null && transform.root.CompareTag("Player"));
 
         if (fireball != null) {
             fireball.LaunchTowards(targetPos, arcHeight, customGravity);

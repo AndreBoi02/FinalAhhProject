@@ -80,21 +80,35 @@ public class BowAttackHandler : MonoBehaviour, IWeapon {
 
         if (!isPlayer) {
             // AI Logic: Prediction based on Ranger level
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null && player.TryGetComponent<Rigidbody>(out var playerRb)) {
+            Agent agent = GetComponentInParent<Agent>();
+            Transform targetT = agent != null ? agent.GetTargetTransform() : null;
+            Rigidbody targetRb = agent != null ? agent.GetTargetRigidbody() : null;
+
+            if (targetT == null) {
+                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                foreach (var p in players) {
+                    if (p.activeInHierarchy && (p.GetComponent<RPlayerController>() != null || p.GetComponent<Agent>() != null)) {
+                        targetT = p.transform;
+                        targetRb = p.GetComponent<Rigidbody>();
+                        break;
+                    }
+                }
+            }
+
+            if (targetT != null) {
                 Ranger ranger = GetComponentInParent<Ranger>();
-                bool shouldPredict = ranger == null || ranger.level == Ranger.Level.Hard;
+                bool shouldPredict = (ranger == null || ranger.level == Ranger.Level.Hard) && targetRb != null;
 
                 if (shouldPredict) {
                     shootingDirection = PredictionHelper.CalculateShootingDirection(
                         spawnPosition,
-                        player.transform.position,
-                        playerRb.linearVelocity,
+                        targetT.position,
+                        targetRb.linearVelocity,
                         projectileSpeed
                     );
                 }
                 else {
-                    shootingDirection = (player.transform.position - spawnPosition).normalized;
+                    shootingDirection = (targetT.position - spawnPosition).normalized;
                 }
             }
         }
@@ -117,15 +131,15 @@ public class BowAttackHandler : MonoBehaviour, IWeapon {
             });
         }
 
-        // Spawn and configure projectile
-        GameObject arrowObj = Instantiate(_proyectile, spawnPosition, Quaternion.LookRotation(shootingDirection));
-        Proyectile arrow = arrowObj.GetComponent<Proyectile>();
+        shootingDirection.y = 0;
+        shootingDirection = shootingDirection.normalized;
 
-        if (arrow != null) {
-            arrow.Speed = (int)projectileSpeed;
-            arrow.SetShootingDirection(shootingDirection);
-            arrow.SetLayer(isPlayer);
-            arrow.SetShooter(isPlayer ? transform.root.gameObject : gameObject);
+        GameObject tempProyectile = Instantiate(_proyectile, spawnPosition, Quaternion.LookRotation(shootingDirection));
+        Proyectile proyectileScript = tempProyectile.GetComponent<Proyectile>();
+        if (proyectileScript != null) {
+            proyectileScript.SetShootingDirection(shootingDirection);
+            proyectileScript.SetLayer(isPlayer);
+            proyectileScript.SetShooter(isPlayer ? transform.root.gameObject : gameObject);
         }
     }
 }
